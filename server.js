@@ -10,7 +10,6 @@ const startServer = async () => {
     // await testConnectionDB(); // проверка соединения с БД
     // await syncDatabase();
     // await checkSmtpConnection(); // проверка соединения с SMTP-сервером
-    // await checkConnectionOS(); // проверка соединения с Yandex Object Storage
 
     app.listen(SERVER_PORT, SERVER_IP, () => {
       logger.info(`✅ Сервер запущен на http://${SERVER_IP}:${SERVER_PORT}`);
