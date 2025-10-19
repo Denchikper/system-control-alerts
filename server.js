@@ -1,6 +1,7 @@
 const app = require('./src/app');
 const logger = require('./src/utils/logger');
 // const syncTime = require('./src/utils/timeSyncService');
+const WebSocketServer = require('./src/services/websocket/websocket-server');
 
 const { testConnectionDB } = require('./src/test/testConnectionDB');
 const { syncDatabase } = require('./src/utils/databaseSync');
@@ -17,9 +18,13 @@ const startServer = async () => {
     
     // await syncTime( ); // Синхронизируем время и выводим актуальное
     
-    app.listen(SERVER_PORT, SERVER_IP, () => {
+    const httpServer = app.listen(SERVER_PORT, SERVER_IP, () => {
       logger.info(`✅ Сервер запущен на http://${SERVER_IP}:${SERVER_PORT}`);
     });
+
+    new WebSocketServer(httpServer);
+
+    logger.info('✅ WebSocket сервер запущен');
   } catch (err) {
     logger.error('❌ Ошибка запуска сервера:', err);
   }

@@ -1,1 +1,1 @@
-system-control-alerts
+system-control-alerts-server
