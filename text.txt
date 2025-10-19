@@ -1,0 +1,149 @@
+// Users table - Пользователи системы
+Table users {
+  id integer [primary key, increment]
+  username varchar(255) [not null, unique]
+  password_hash varchar(255) [not null]
+  name varchar(100) [not null]
+  role varchar(20) [default: 'user', note: 'admin, user, duty']
+  last_login timestamp
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+  
+  indexes {
+    username
+    role
+  }
+}
+
+// Devices table - Устройства для воспроизведения
+Table devices {
+  id integer [primary key, increment]
+  name varchar(255) [not null]
+  ip_address varchar(45) [not null, note: 'IPv6 support']
+  location varchar(255)
+  is_active boolean [default: true]
+  api_key varchar(100)
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+  
+  indexes {
+    ip_address
+  }
+}
+
+
+// Schedules table - Расписания звонков
+Table schedules {
+  id integer [primary key, increment]
+  name varchar(255) [not null]
+  description text
+  is_active boolean [default: false]
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+  
+  indexes {
+    is_active
+  }
+}
+
+// Schedule days - Дни расписания
+Table schedule_days {
+  id integer [primary key, increment]
+  schedule_id integer [not null, ref: > schedules.id]
+  day_of_week integer [not null, note: '0-6 (Sunday-Saturday)']
+  is_enabled boolean [default: true]
+  start_time time
+  end_time time
+  created_at timestamp [default: `now()`]
+  
+  indexes {
+    schedule_id
+    day_of_week
+  }
+}
+
+// Bells table - Звонки в расписании
+Table bells {
+  id integer [primary key, increment]
+  schedule_id integer [not null, ref: > schedules.id]
+  time time [not null]
+  title varchar(255) [not null]
+  channel_id varchar(100) [not null, note: 'ID канала для воспроизведения']
+  duration_seconds integer [default: 30]
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+  
+  indexes {
+    schedule_id
+    time
+  }
+}
+
+// Scheduled alerts - Разовые оповещения
+Table scheduled_alerts {
+  id integer [primary key, increment]
+  title varchar(255) [not null]
+  alert_date date [not null]
+  alert_time time [not null]
+  channel_id varchar(100) [not null]
+  is_recurring boolean [default: false, note: 'Повторять ежегодно']
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+  
+  indexes {
+    alert_date
+  }
+}
+
+// Holidays table - Праздничные дни
+Table holidays {
+  id integer [primary key, increment]
+  date date [not null]
+  name varchar(255) [not null]
+  description text
+  is_recurring boolean [default: true]
+  disable_bells boolean [default: true]
+  created_at timestamp [default: `now()`]
+  
+  indexes {
+    date
+  }
+}
+
+// Playback logs - Логи воспроизведения
+Table playback_logs {
+  id integer [primary key, increment]
+  bell_id integer [ref: > bells.id, note: 'NULL для разовых оповещений']
+  scheduled_alert_id integer [ref: > scheduled_alerts.id]
+  scheduled_time timestamp [not null]
+  actual_time timestamp [default: `now()`]
+  status varchar(50) [not null, note: 'success, error, skipped']
+  error_message text
+  created_at timestamp [default: `now()`]
+  
+  indexes {
+    scheduled_time
+    status
+  }
+}
+
+// Announcements table - Отдельные оповещения
+Table announcements {
+  id integer [primary key, increment]
+  title varchar(255) [not null]
+  channel_id varchar(100) [not null, note: 'ID канала для воспроизведения']
+  
+  announcement_type varchar(50) [not null, note: 'immediate, scheduled, recurring']
+  
+  is_active boolean [default: true]
+  repeat_count integer [default: 1, note: 'Количество повторений']
+  repeat_interval integer [default: 0, note: 'Интервал в секундах между повторениями']
+  
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+  
+  indexes {
+    announcement_type
+    is_active
+  }
+}
