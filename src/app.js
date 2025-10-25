@@ -10,7 +10,7 @@ const routes = require('./routers');
 app.use(cors());
 app.use(helmet());
 app.use(express.json()); // чтобы принимать JSON
-// app.use('/api', routes); // все маршруты начинаются с /api
+app.use('/api', routes); // все маршруты начинаются с /api
 
 
 app.use((err, req, res, next) => {
