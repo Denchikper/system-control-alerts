@@ -1,0 +1,98 @@
+Table users {
+  id uuid [primary key]
+  username varchar [unique, not null]
+  password_hash varchar [not null]
+  first_name varchar
+  last_name varchar
+  role varchar [default: 'user']
+  created_at datetime
+  updated_at datetime
+}
+
+Table devices {
+  id uuid [primary key]
+  device_name varchar [unique, not null]
+  device_type varchar
+  ip_address varchar [not null]
+  device_port integer
+  desciption varchar
+  is_online boolean
+  created_at datetime
+  updated_at datetime
+}
+
+Table schedule_items {
+  id integer [primary key, increment]
+  schedule_id integer [not null]
+  day_id integer [not null]
+  item_order integer [not null]
+  item_type varchar [not null]
+  lesson_id integer
+  break_id integer
+  start_time time [not null]
+  end_time time [not null]
+  
+  indexes {
+    (schedule_id, day_id, item_order) [unique]
+  }
+}
+
+Table scheduled_events {
+  id integer [primary key, increment]
+  name varchar(100) [not null]
+  description text
+  event_type varchar [not null, default: 'special']
+  channel integer
+  start_time datetime [not null]
+  end_time datetime [not null]
+  is_recurring boolean [default: false]
+  recurrence_pattern varchar(50)
+  is_active boolean [default: true]
+  created_at datetime [default: `now()`]
+  updated_at datetime [default: `now()`]
+}
+
+Table days {
+  id integer [primary key, increment]
+  name varchar(20) [unique, not null]
+  order_index integer [unique, not null]
+  created_at datetime [default: `now()`]
+}
+
+Table channels {
+  id integer [primary key, increment]
+  name varchar(50) [not null]
+  pin_number integer [unique, not null]
+  description text
+  created_at datetime [default: `now()`]
+  updated_at datetime [default: `now()`]
+}
+
+Table schedules {
+  id integer [primary key, increment]
+  name varchar(100) [not null]
+  description text
+  created_at datetime [default: `now()`]
+  updated_at datetime [default: `now()`]
+}
+Table lessons {
+  id integer [primary key, increment]
+  name varchar(100) [not null]
+  channel integer
+  created_at datetime [default: `now()`]
+  updated_at datetime [default: `now()`]
+}
+
+Table breaks {
+  id integer [primary key, increment]
+  name varchar(50) [default: 'Перемена']
+  duration_minutes integer [not null]
+  created_at datetime [default: `now()`]
+}
+
+Ref: schedule_items.break_id > breaks.id
+Ref: lessons.channel > channels.id
+Ref: schedule_items.lesson_id > lessons.id
+Ref: schedule_items.schedule_id > schedules.id
+Ref: schedule_items.day_id > days.id
+Ref: scheduled_events.channel > channels.id
