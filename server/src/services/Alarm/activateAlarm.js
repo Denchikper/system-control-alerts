@@ -1,15 +1,55 @@
 const wsSingleton = require('../websocket/wsSingleton');
+const logger = require('../../utils/logger');
+const Channel = require('../../models/Channel');
+const deactivateAlarm = require('./deactivateAlarm');
 
-const activateAlert = (channel, isTest = false) => {
-  console.log('Активируем канал:', channel, 'isTest:', isTest);
-
+const activateAlarm = async (alarm, res) => {
   try {
+    await deactivateAlarm();
+
     const wsServer = wsSingleton.get();
-    const sent = wsServer.sendCommand(channel, 'activate');
-    if (!sent) console.warn(`⚠️ Устройство с каналом ${channel} не подключено`);
+
+    const channel = await Channel.findOne({ where: { id: alarm.channel } });
+
+    if (!channel) {
+      logger.ws_error(`Канал с id ${alarm.channel} не найден`);
+      return res.status(404).json({ message: `Канал с id ${alarm.channel} не найден` });
+    }
+
+    let sent = false;
+
+    if (alarm.is_drill) {
+      const drillChannel = await Channel.findOne({ where: { is_drill: true } });
+      if (!drillChannel) {
+        logger.ws_error('Канал для включения тренировки не найден');
+        return res.status(404).json({ message: 'Канал для включения тренировки не найден' });
+      }
+
+      sent = wsServer.sendCommand('activatealarm', [channel.pin_number, drillChannel.pin_number]);
+      logger.ws_success(`Активирована тревога №${alarm.id} (${alarm.name}) (тренировочный режим)`);
+
+      res.json({ message: `Активирована тревога №${alarm.id} (${alarm.name}) (тренировочный режим)` });
+    } else {
+      sent = wsServer.sendCommand('activatealarm', channel.pin_number);
+      logger.ws_success(`Активирована тревога №${alarm.id} (${alarm.name}) (обычный режим)`);
+      res.json({ message: `Активирована тревога №${alarm.id} (${alarm.name}) (обычный режим)` });
+    }
+
+    if (!sent) {
+      logger.ws_error(`Не удалось активировать тревогу №${alarm.id} (${alarm.name}) — устройство не подключено`);
+      return res.status(500).json({
+        message: `Не удалось активировать тревогу №${alarm.id} (${alarm.name})— устройство не подключено`
+      });
+    }
+
+    // Обновляем статус сигнала
+    alarm.is_active = true;
+    await alarm.save();
+
   } catch (err) {
-    console.error('❌ Ошибка отправки команды на WS:', err);
+    logger.ws_error(`Ошибка при активации канала: ${err.stack || err}`);
+    res.status(500).json({ message: 'Ошибка при активации канала', error: err.message || err });
   }
 };
 
-module.exports = activateAlert;
+module.exports = activateAlarm;

@@ -9,25 +9,14 @@ exports.activateAlarmController = async (req, res) => {
     const alarm = await Alarm.findOne({ where: { id } });
 
     if (!alarm) {
-      return res.status(404).json({ message: 'Оповещение не найдено' });
+      return res.status(404).json({ message: `Тревога №${id} не найдена.` });
     }
 
     if (alarm.is_active) {
-      return res.status(400).json({ message: 'Оповещение уже активно' });
+      return res.status(400).json({ message: `Тревога №${id} уже активировна.` });
     }
 
-    const channelId = alarm.channel;
-    const isTest = alarm.is_test;
-
-    await activateAlarm(channelId, isTest);
-
-    alarm.is_active = true;
-    await alarm.save();
-
-    logger.info(`Сигнал успешно отправлен на канал ${channelId}`);
-    res.json({
-      message: 'Сигнал успешно отправлен'
-    });
+    activateAlarm(alarm, res);
 
   } catch (err) {
     logger.error('Ошибка отправления сигнала:', err);

@@ -19,15 +19,15 @@ const startServer = async () => {
     // await syncTime( ); // Синхронизируем время и выводим актуальное
     
     const server = app.listen(SERVER_PORT, SERVER_IP, () => {
-      logger.info(`✅ Сервер запущен на http://${SERVER_IP}:${SERVER_PORT}`);
+      logger.server_success(`Сервер запущен на http://${SERVER_IP}:${SERVER_PORT}`);
     });
 
     wsSingleton.init(server);
 
-    
-    logger.info('✅ WebSocket сервер запущен');
+  
+    logger.ws_success('WebSocket сервер запущен!');
   } catch (err) {
-    logger.error('❌ Ошибка запуска сервера:', err);
+    logger.server_error('Ошибка запуска сервера:', err);
   }
 };
 

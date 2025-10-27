@@ -15,7 +15,7 @@ const Alarm = sequelize.define('Alarm', {
     type: DataTypes.TEXT,
     allowNull: true
   },
-  is_test: {
+  is_drill: {
     type: DataTypes.BOOLEAN,
     defaultValue: false
   },

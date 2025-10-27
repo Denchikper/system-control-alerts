@@ -4,63 +4,56 @@ const logger = require('../../utils/logger');
 class WebSocketServer {
   constructor(server) {
     this.wss = new WebSocket.Server({ server });
-    this.devices = new Map(); // channelId => ws-соединение
+    this.device = null;
+    this.deviceName = null;
 
     this.wss.on('connection', (ws, req) => {
-      logger.info(`🔗 Новый клиент подключился: ${req.socket.remoteAddress}`);
-
       ws.on('message', (message) => {
         try {
           const data = JSON.parse(message);
 
-          // Регистрация устройства
-          if (data.type === 'register' && data.channelId) {
-            this.devices.set(data.channelId, ws);
-            ws.channelId = data.channelId;
-            logger.info(`✅ Устройство зарегистрировано: канал ${data.channelId}`);
+          if (data.type === 'register' && data.nameDevice) {
+            this.device = ws;
+            this.deviceName = data.nameDevice;
+            logger.ws_success(`Устройство "${data.nameDevice}" зарегистрировано`);
             return;
           }
 
-          logger.info('📩 Сообщение от клиента:', data);
-
+          logger.ws_success('Сообщение от клиента:', data);
         } catch (err) {
-          logger.error('❌ Ошибка обработки сообщения:', err);
+          logger.ws_error('Ошибка обработки сообщения:', err);
         }
       });
 
       ws.on('close', () => {
-        if (ws.channelId) {
-          this.devices.delete(ws.channelId);
-          logger.info(`❌ Устройство отключилось: канал ${ws.channelId}`);
+        if (ws === this.device) {
+          logger.ws_success(`Устройство "${this.deviceName}" отключилось`);
+          this.device = null;
+          this.deviceName = null;
         }
       });
 
       ws.on('error', (err) => {
-        logger.error('⚠️ Ошибка WS клиента:', err);
-        if (ws.channelId) this.devices.delete(ws.channelId);
+        logger.ws_error('Ошибка WS клиента:', err);
+        if (ws === this.device) {
+          this.device = null;
+          this.deviceName = null;
+        }
       });
     });
   }
 
-  sendCommand(channelId, command) {
-    const device = this.devices.get(channelId);
-    if (!device || device.readyState !== WebSocket.OPEN) {
-      logger.warn(`⚠️ Устройство с каналом ${channelId} не подключено`);
+  // -----------------------------
+  // Отправка команды на устройство
+  // -----------------------------
+  sendCommand(command, channel) {
+    if (!this.device || this.device.readyState !== WebSocket.OPEN) {
       return false;
     }
 
-    const payload = { command, channelId };
-    device.send(JSON.stringify(payload));
+    const payload = { command, channel };
+    this.device.send(JSON.stringify(payload));
     return true;
-  }
-
-  broadcast(command) {
-    for (const [channelId, device] of this.devices.entries()) {
-      if (device.readyState === WebSocket.OPEN) {
-        device.send(JSON.stringify({ command, channelId }));
-      }
-    }
-    logger.info(`📡 Команда "${command}" отправлена всем устройствам`);
   }
 }
 
