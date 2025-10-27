@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../database');
 
-const Alert = sequelize.define('Alert', {
+const Alarm = sequelize.define('Alarm', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -36,8 +36,8 @@ const Alert = sequelize.define('Alert', {
     defaultValue: DataTypes.NOW
   }
 }, {
-  tableName: 'alerts',
+  tableName: 'alarm',
   timestamps: false
 });
 
-module.exports = Alert;
+module.exports = Alarm;

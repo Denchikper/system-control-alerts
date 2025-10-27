@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../database');
 
-const ScheduledEvent = sequelize.define('ScheduledEvent', {
+const AlertPlanned = sequelize.define('AlertPlanned', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -50,8 +50,8 @@ const ScheduledEvent = sequelize.define('ScheduledEvent', {
     defaultValue: DataTypes.NOW
   }
 }, {
-  tableName: 'scheduled_events',
+  tableName: 'alerts_planned',
   timestamps: false
 });
 
-module.exports = ScheduledEvent;
+module.exports = AlertPlanned;
