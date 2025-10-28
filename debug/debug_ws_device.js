@@ -1,8 +1,8 @@
 const WebSocket = require('ws');
 
 // Каждый “устройство” запускается как отдельный клиент для отладки
-const NameDevice = "Device-Relay";
-const SERVER_URL = 'ws://localhost:2255'; // Адрес основного сервера
+const NameDevice = "Device-DEBUG";
+const SERVER_URL = 'ws://192.168.1.99:2255'; // Адрес основного сервера
 
 const ws = new WebSocket(SERVER_URL);
 

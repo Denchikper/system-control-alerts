@@ -8,9 +8,12 @@ class WebSocketServer {
     this.deviceName = null;
 
     this.wss.on('connection', (ws, req) => {
+      
       ws.on('message', (message) => {
         try {
           const data = JSON.parse(message);
+
+          if(data.type === 'ping') {ws.isAlive = true; return;}
 
           if (data.type === 'register' && data.nameDevice) {
             this.device = ws;
@@ -32,6 +35,34 @@ class WebSocketServer {
           this.deviceName = null;
         }
       });
+
+      ws.isAlive = true;
+
+const HEARTBEAT_INTERVAL = 10000000;
+
+this.wss.on('connection', (ws) => {
+  ws.isAlive = true;
+
+  ws.on('pong', () => ws.isAlive = true);
+
+});
+
+// Таймер проверки "живости" клиентов
+setInterval(() => {
+  this.wss.clients.forEach((ws) => {
+    if (!ws.isAlive) {
+      console.log('Клиент потерян, закрываем соединение');
+      ws.terminate();
+      if (ws === this.device) {
+        this.device = null;
+        this.deviceName = null;
+      }
+    } else {
+      ws.isAlive = false;
+      ws.ping(); // сервер отправляет ping, клиент должен ответить pong
+    }
+  });
+}, HEARTBEAT_INTERVAL);
 
       ws.on('error', (err) => {
         logger.ws_error('Ошибка WS клиента:', err);

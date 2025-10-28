@@ -19,6 +19,9 @@ const Channel = sequelize.define('Channel', {
     type: DataTypes.BOOLEAN,
     defaultValue: false
   },
+  duration: {
+    type: DataTypes.INTEGER,
+  },
   created_at: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW
