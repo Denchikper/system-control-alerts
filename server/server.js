@@ -5,6 +5,7 @@ const wsSingleton = require('./src/services/websocket/wsSingleton');
 
 const { testConnectionDB } = require('./src/test/testConnectionDB');
 const { syncDatabase } = require('./src/utils/databaseSync');
+const { resetDeviceStatus } = require('./src/services/websocket/resetDeviceStatus');
 
 const SERVER_PORT = process.env.SERVER_PORT;
 const SERVER_IP = process.env.SERVER_IP;
@@ -15,6 +16,7 @@ const startServer = async () => {
   try {
     await testConnectionDB(); // проверка соединения с БД
     await syncDatabase();
+    await resetDeviceStatus();
     
     // await syncTime( ); // Синхронизируем время и выводим актуальное
     
