@@ -1,6 +1,15 @@
 #include "alarmManager.h"
 #include <ArduinoJson.h>
 
+// === ПИНЫ РЕЛЕ ===
+#define RELAY_CH1 2
+#define RELAY_CH2 4
+#define RELAY_CH3 5
+#define RELAY_CH4 3
+#define RELAY_CH5 14
+#define RELAY_CH7 17
+#define RELAY_CH8 15
+
 struct ChannelDelay {
   int channel;
   unsigned long delayMs;
@@ -13,32 +22,70 @@ int channelCount = 0;
 int currentIndex = 0;
 unsigned long lastSwitch = 0;
 bool channelOn = false;          // текущий статус канала в цикле
-
 int singleChannel = -1;          // для одиночного канала
+
+
+// --- Выключить все реле (HIGH = выкл, LOW = вкл) ---
+void deactivateAllRelays() {
+  digitalWrite(RELAY_CH1, HIGH);
+  digitalWrite(RELAY_CH2, HIGH);
+  digitalWrite(RELAY_CH3, HIGH);
+  digitalWrite(RELAY_CH4, HIGH);
+  digitalWrite(RELAY_CH5, HIGH);
+  digitalWrite(RELAY_CH7, HIGH);
+  digitalWrite(RELAY_CH8, HIGH);
+}
+
+void setupAlarm() {
+  pinMode(RELAY_CH1, OUTPUT);
+  pinMode(RELAY_CH2, OUTPUT);
+  pinMode(RELAY_CH3, OUTPUT);
+  pinMode(RELAY_CH4, OUTPUT);
+  pinMode(RELAY_CH5, OUTPUT);
+  pinMode(RELAY_CH7, OUTPUT);
+  pinMode(RELAY_CH8, OUTPUT);
+
+  deactivateAllRelays();
+}
+
+// --- Управление конкретным реле ---
+// ВНИМАНИЕ: LOW = включить, HIGH = выключить
+void setRelayState(int channel, bool state) {
+  bool pinState = state ? LOW : HIGH; // инверсия логики
+  switch (channel) {
+    case 1: digitalWrite(RELAY_CH1, pinState); break;
+    case 2: digitalWrite(RELAY_CH2, pinState); break;
+    case 3: digitalWrite(RELAY_CH3, pinState); break;
+    case 4: digitalWrite(RELAY_CH4, pinState); break;
+    case 5: digitalWrite(RELAY_CH5, pinState); break;
+    case 7: digitalWrite(RELAY_CH7, pinState); break;
+    case 8: digitalWrite(RELAY_CH8, pinState); break;
+    default: break;
+  }
+}
 
 void handleAlarmCommand(const String& jsonStr) {
   StaticJsonDocument<256> doc;
   DeserializationError error = deserializeJson(doc, jsonStr);
-  if(error) {
-    Serial.println("[JSON] Ошибка разбора JSON");
+  if (error) {
     return;
   }
 
   const char* command = doc["command"];
-  if(strcmp(command, "deactivatealarm") == 0) {
+  if (strcmp(command, "deactivatealarm") == 0) {
     alarmActive = false;
     cycleMode = false;
     singleChannel = -1;
-    Serial.println("[ALARM] Все каналы отключены");
+    deactivateAllRelays();
     return;
   }
 
-  if(strcmp(command, "activatealarm") == 0) {
-    if(doc["channel"].is<JsonArray>()) {
+  if (strcmp(command, "activatealarm") == 0) {
+    if (doc["channel"].is<JsonArray>()) {
       // режим с чередованием каналов и задержками
       JsonArray arr = doc["channel"].as<JsonArray>();
       channelCount = 0;
-      for(size_t i = 0; i + 1 < arr.size() && channelCount < 10; i += 2) {
+      for (size_t i = 0; i + 1 < arr.size() && channelCount < 10; i += 2) {
         channels[channelCount].channel = arr[i];
         channels[channelCount].delayMs = arr[i + 1];
         channelCount++;
@@ -48,12 +95,10 @@ void handleAlarmCommand(const String& jsonStr) {
       channelOn = false;
       cycleMode = true;
       alarmActive = true;
-      Serial.println("[ALARM] Активировано с последовательным циклом");
     } else {
       // одиночный канал
       singleChannel = doc["channel"];
-      Serial.print("[ALARM] Активирован канал: ");
-      Serial.println(singleChannel);
+      setRelayState(singleChannel, true);
       alarmActive = true;
       cycleMode = false;
     }
@@ -61,25 +106,22 @@ void handleAlarmCommand(const String& jsonStr) {
 }
 
 void updateAlarm() {
-  if(!alarmActive) return;
+  if (!alarmActive) return;
 
-  if(cycleMode && channelCount > 0) {
+  if (cycleMode && channelCount > 0) {
     unsigned long now = millis();
-    if(!channelOn || now - lastSwitch >= channels[currentIndex].delayMs) {
-      if(channelOn) {
-        Serial.print("[ALARM] Выключаем канал: ");
-        Serial.println(channels[currentIndex].channel);
+    if (!channelOn || now - lastSwitch >= channels[currentIndex].delayMs) {
+      if (channelOn) {
+        setRelayState(channels[currentIndex].channel, false);
         currentIndex++;
-        if(currentIndex >= channelCount) currentIndex = 0;
+        if (currentIndex >= channelCount) currentIndex = 0;
       }
 
-      Serial.print("[ALARM] Включаем канал: ");
-      Serial.println(channels[currentIndex].channel);
+      setRelayState(channels[currentIndex].channel, true);
       lastSwitch = now;
       channelOn = true;
     }
-  } else if(!cycleMode && singleChannel != -1) {
-    // одиночный канал включен, ничего не делаем, просто держим
-    // можно здесь добавить проверку состояния реле, если будет подключено
+  } else if (!cycleMode && singleChannel != -1) {
+    // одиночный канал включен, просто удерживаем
   }
 }

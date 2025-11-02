@@ -2,13 +2,16 @@ const wsSingleton = require('../websocket/wsSingleton');
 const logger = require('../../utils/logger');
 const Channel = require('../../models/Channel');
 const deactivateAlarm = require('./deactivateAlarm');
+const Alarm = require('../../models/Alarm');
 
 const activateAlarm = async (alarm, res) => {
   try {
-    await deactivateAlarm();
+    const activeAlarm = await Alarm.findOne({ where: { is_active: true } });
+    if (activeAlarm) {
+      await deactivateAlarm();
+    }
 
     const wsServer = wsSingleton.get();
-
 
     const channel = await Channel.findOne({ where: { id: alarm.channel } });
     if (!channel) {
@@ -29,7 +32,7 @@ const activateAlarm = async (alarm, res) => {
       sent = wsServer.sendCommand('activatealarm', [drillChannel.pin_number, drillChannel.duration, channel.pin_number, channel.duration]);
       if (!sent) {
         logger.ws_error(`Не удалось активировать тревогу №${alarm.id} (${alarm.name} | Учебная тренировка) — устройство не подключено`);
-        return res.status(500).json({ message: `Не удалось активировать тревогу №${alarm.id} (${alarm.name} | Учебная тренировка) — устройство не подключено` });
+        return res.status(503).json({ message: `Не удалось активировать тревогу №${alarm.id} (${alarm.name} | Учебная тренировка) — устройство не подключено` });
       }
 
       logger.ws_success(`Активирована тревога №${alarm.id} (${alarm.name}) (тренировочный режим)`);
@@ -42,7 +45,7 @@ const activateAlarm = async (alarm, res) => {
     sent = wsServer.sendCommand('activatealarm', channel.pin_number);
     if (!sent) {
       logger.ws_error(`Не удалось активировать тревогу №${alarm.id} (${alarm.name}) — устройство не подключено`);
-      return res.status(500).json({ message: `Не удалось активировать тревогу №${alarm.id} (${alarm.name}) — устройство не подключено` });
+      return res.status(503).json({ message: `Не удалось активировать тревогу №${alarm.id} (${alarm.name}) — устройство не подключено` });
     }
 
     logger.ws_success(`Активирована тревога №${alarm.id} (${alarm.name}) (обычный режим)`);

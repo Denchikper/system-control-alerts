@@ -16,7 +16,6 @@ bool isRegistered = false;  // Флаг регистрации
 
 // -------------------- Обработка сообщений --------------------
 void handleMessage(WebsocketsMessage message) {
-  Serial.println("[WS] Received: " + message.data());
 
   StaticJsonDocument<200> doc;
   deserializeJson(doc, message.data());
@@ -24,7 +23,6 @@ void handleMessage(WebsocketsMessage message) {
 
   if(type == "registered") {
     isRegistered = true; // успешно зарегистрировались
-    Serial.println("[WS] Регистрация успешна");
     return;
   }
 
@@ -46,9 +44,7 @@ void sendPing() {
 
 // -------------------- Подключение к серверу --------------------
 void connectToServer() {
-  Serial.println("[WS] Подключение...");
   if(client.connect(ws_server)) {
-    Serial.println("[WS] Подключено");
 
     // Отправляем регистрацию только если ещё не зарегистрированы
     if(!isRegistered) {
@@ -58,10 +54,7 @@ void connectToServer() {
       String json;
       serializeJson(doc, json);
       client.send(json);
-      Serial.println("[WS] Запрос регистрации отправлен: " + json);
     }
-  } else {
-    Serial.println("[WS] Не удалось подключиться, попытка через 5с");
   }
 }
 
@@ -82,7 +75,6 @@ void pollWS() {
 
     unsigned long now = millis();
     if(now - lastReconnectAttempt > 5000) {
-      Serial.println("[WS] Переподключение...");
       connectToServer();
       lastReconnectAttempt = now;
     }

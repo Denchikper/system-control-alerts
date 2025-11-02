@@ -8,10 +8,11 @@ const deactivateAlarm = async (res) => {
 
     // Получаем все активные тревоги
     const activeAlarm = await Alarm.findOne({ where: { is_active: true } });
+
     if (!activeAlarm) {
       const msg = 'Нет активной тревоги для деактивации';
       logger.ws_warn(msg);
-      if (res) return res.json({ message: msg });
+      if (res) return res.status(400).json({ message: msg });
       return false;
     }
 
@@ -21,7 +22,7 @@ const deactivateAlarm = async (res) => {
     if (!sent) {
       const msg = 'Не удалось отправить команду деактивации — устройство не подключено';
       logger.ws_error(msg);
-      if (res) return res.status(500).json({ message: msg });
+      if (res) return res.status(503).json({ message: msg });
       return false;
     }
 

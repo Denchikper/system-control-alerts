@@ -10,12 +10,12 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ where: { username } });
 
     if (!user) {
-      return res.status(401).json({ message: 'Неверный username или пароль' });
+      return res.status(401).json({ message: 'Неверный логин или пароль' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password_hash);
     if (!isMatch) {
-      return res.status(401).json({ message: 'Неверный username или пароль' });
+      return res.status(401).json({ message: 'Неверный логин или пароль' });
     }
 
     const token = generateToken({ 
@@ -25,10 +25,9 @@ exports.login = async (req, res) => {
       lastName: user.last_name,
       role: user.role,
       createdAt: user.created_at
-    }, '7d');
+    }, '1h');
 
     res.json({
-      message: 'Успешный вход',
       token
     });
   } catch (err) {

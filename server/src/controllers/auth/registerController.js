@@ -36,14 +36,7 @@ exports.register = async (req, res) => {
       last_name,
       role
     });
-    const token = generateToken({ 
-      userId: newUser.id, 
-      firstName: newUser.first_name,
-      lastName: newUser.last_name,
-      role: newUser.role,
-      createdAt: newUser.created_at 
-    }, '7d');
-    res.status(201).json({ message: 'Пользователь успешно зарегистрирован', token });
+    res.status(201).json({ message: 'Пользователь успешно зарегистрирован'});
 
   } catch (error) {
     logger.error('Ошибка регистрации:', error);

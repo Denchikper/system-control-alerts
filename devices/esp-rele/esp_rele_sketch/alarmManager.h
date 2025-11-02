@@ -5,5 +5,6 @@
 
 void handleAlarmCommand(const String& jsonStr);
 void updateAlarm();
+void setupAlarm();
 
 #endif
