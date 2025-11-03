@@ -3,9 +3,9 @@ const sequelize = require('../database');
 
 const Alarm = sequelize.define('Alarm', {
   id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.UUID,
     primaryKey: true,
-    autoIncrement: true
+    defaultValue: DataTypes.UUIDV4
   },
   name: {
     type: DataTypes.STRING(100),
@@ -37,7 +37,8 @@ const Alarm = sequelize.define('Alarm', {
   }
 }, {
   tableName: 'alarm',
-  timestamps: false
+  timestamps: false,
+  underscored: true,
 });
 
 module.exports = Alarm;

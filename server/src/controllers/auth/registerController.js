@@ -9,6 +9,7 @@ exports.register = async (req, res) => {
     username, 
     password, 
     first_name,
+    second_name,
     last_name,
     role,
   } = req.body;
@@ -33,6 +34,7 @@ exports.register = async (req, res) => {
       username,
       password_hash,
       first_name,
+      second_name,
       last_name,
       role
     });

@@ -1,5 +1,8 @@
 import React, { useEffect } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
+import Navbar from "../components/NavBar.jsx";
+import ClockBar from "../components/ClockBar.jsx";
+import SystemStatus from "../components/SystemStatus.jsx";
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
@@ -8,24 +11,18 @@ export default function Dashboard() {
       document.title = "Панель управления | СУЗО";
   }, []);
 
-  return (
-    <div className="flex flex-col h-screen bg-[#0E1117] text-gray-100 p-6">
-      <header className="flex justify-between items-center border-b border-gray-700 pb-3">
-        <h1 className="text-xl font-semibold">Панель управления</h1>
-        <button
-          onClick={logout}
-          className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-md text-white transition"
-        >
-          Выйти
-        </button>
-      </header>
+return (
+    <div className="flex flex-col h-screen bg-[#0E1117] text-gray-200">
+      <Navbar />
 
-      <main className="flex-1 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-lg mb-2">Добро пожаловать, {user?.firstName || "пользователь"}!</p>
-          <p className="text-gray-400">Ваш токен успешно сохранён 🔐</p>
+      <div className="flex flex-1 px-6 py-4 space-x-6">
+        <SystemStatus />
+        <div className="flex-1 bg-[#11141A] rounded-2xl p-6 shadow-lg">
+          {/* Основная область */}
+          <h2 className="text-xl font-semibold mb-4">Главная</h2>
+          <p>Здесь будет информация о тревогах и оповещениях.</p>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

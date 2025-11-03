@@ -4,6 +4,7 @@ exports.getProfile = (req, res) => {
     username,
     firstName,
     lastName,
+    secondName,
     role,
     createdAt,
   } = req.user;
@@ -13,6 +14,7 @@ exports.getProfile = (req, res) => {
     userId,
     username,
     firstName,
+    secondName,
     lastName,
     role,
     createdAt,

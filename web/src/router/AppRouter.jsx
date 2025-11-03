@@ -3,6 +3,11 @@ import Login from "../pages/login.jsx";
 import Dashboard from "../pages/Dashboard.jsx";
 import PrivateRoute from "../components/PrivateRoute.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
+import AlarmsPage from "../pages/Alarms.jsx";
+import SchoolBellsPage from "../pages/SchoolBells.jsx";
+import PlannedAlertsPage from "../pages/PlannedAlerts.jsx";
+import DevicesPage from "../pages/Devices.jsx";
+import SettingsPage from "../pages/Settings.jsx";
 
 export default function AppRouter() {
   const { token, loading } = useAuth();
@@ -23,6 +28,47 @@ export default function AppRouter() {
           </PrivateRoute>
         }
       />
+      <Route
+        path="/alarms"
+        element={
+          <PrivateRoute>
+            <AlarmsPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/schoolbells"
+        element={
+          <PrivateRoute>
+            <SchoolBellsPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/plannedalerts"
+        element={
+          <PrivateRoute>
+            <PlannedAlertsPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/devices"
+        element={
+          <PrivateRoute>
+            <DevicesPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <PrivateRoute>
+            <SettingsPage />
+          </PrivateRoute>
+        }
+      />
+
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

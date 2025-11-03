@@ -22,10 +22,11 @@ exports.login = async (req, res) => {
       userId: user.id, 
       username: user.username,
       firstName: user.first_name,
+      secondName: user.second_name,
       lastName: user.last_name,
       role: user.role,
       createdAt: user.created_at
-    }, '1h');
+    }, '2h');
 
     res.json({
       token

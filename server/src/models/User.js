@@ -19,6 +19,9 @@ const User = sequelize.define('User', {
   first_name: {
     type: DataTypes.STRING
   },
+  second_name: {
+    type: DataTypes.STRING
+  },
   last_name: {
     type: DataTypes.STRING
   },

@@ -3,10 +3,13 @@ const sequelize = require('../database');
 
 const Device = sequelize.define('Device', {
   id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.UUID,
     primaryKey: true,
-    allowNull: false,
-    autoIncrement: true
+    defaultValue: DataTypes.UUIDV4
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false
   },
   device_name: {
     type: DataTypes.STRING,
