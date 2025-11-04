@@ -7,26 +7,29 @@ const Device = sequelize.define('Device', {
     primaryKey: true,
     defaultValue: DataTypes.UUIDV4
   },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
   device_name: {
     type: DataTypes.STRING,
     unique: true,
     allowNull: false
   },
   device_type: {
-    type: DataTypes.STRING,
+    type: DataTypes.ENUM('relay', 'receiver'), // ✅ только два варианта
+    allowNull: false
   },
   ip_address: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  device_port: {
-    type: DataTypes.INTEGER
-  },
-  desciption: {
+  description: { // ✅ исправлена опечатка
     type: DataTypes.STRING
   },
-  isOnline: {
+  is_online: {
     type: DataTypes.BOOLEAN,
+    defaultValue: false
   }
 }, {
   tableName: 'devices',

@@ -7,17 +7,20 @@ const Channel = sequelize.define('Channel', {
     primaryKey: true,
     autoIncrement: true
   },
-  name: {
-    type: DataTypes.STRING(50),
-    allowNull: false
-  },
   pin_number: {
     type: DataTypes.INTEGER,
     allowNull: false,
     unique: true
   },
-  description: {
+  name: {
     type: DataTypes.TEXT
+  },
+  is_drill: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  },
+  duration: {
+    type: DataTypes.INTEGER,
   },
   created_at: {
     type: DataTypes.DATE,
