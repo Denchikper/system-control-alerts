@@ -34,7 +34,9 @@ export default function DevicesPage() {
     setError(null);
     try {
       const data = await getDevices(token, logout, navigate);
-      setDevices(Array.isArray(data) ? data : []);
+      if(data.ok) {
+        setDevices(Array.isArray(data.data) ? data.data : []);
+      }
     } catch (err) {
       console.error("Ошибка загрузки устройств:", err);
       setError("Не удалось загрузить список устройств");
@@ -117,14 +119,14 @@ export default function DevicesPage() {
           <div className="flex items-center gap-3">
             <button
               onClick={openCreate}
-              className="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg font-medium"
+              className="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg font-medium cursor-pointer"
             >
               + Добавить устройство
             </button>
             <button
               onClick={loadDevices}
               title="Обновить"
-              className="px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg"
+              className="px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg cursor-pointer"
             >
               Обновить
             </button>

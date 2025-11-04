@@ -16,7 +16,7 @@ const activateAlarm = async (alarm, res) => {
     const channel = await Channel.findOne({ where: { id: alarm.channel } });
     if (!channel) {
       logger.ws_error(`Канал с id ${alarm.channel} не найден`);
-      return res.status(404).json({ message: `Канал с id ${alarm.channel} не найден` });
+      return res.status(404).json({ errorMessage: `Канал с ID ${alarm.channel} не найден` });
     }
 
     let sent = false;
@@ -26,13 +26,13 @@ const activateAlarm = async (alarm, res) => {
       
       if (!drillChannel) {
         logger.ws_error('Канал для включения тренировки не найден');
-        return res.status(404).json({ message: 'Канал для включения тренировки не найден' });
+        return res.status(404).json({ errorMessage: 'Канал для включения тренировки не найден' });
       }
 
       sent = wsServer.sendCommand('activatealarm', [drillChannel.pin_number, drillChannel.duration, channel.pin_number, channel.duration]);
       if (!sent) {
         logger.ws_error(`Не удалось активировать тревогу №${alarm.id} (${alarm.name} | Учебная тренировка) — устройство не подключено`);
-        return res.status(503).json({ message: `Не удалось активировать тревогу №${alarm.id} (${alarm.name} | Учебная тренировка) — устройство не подключено` });
+        return res.status(503).json({ errorMessage: `Не удалось активировать тревогу №${alarm.id} (${alarm.name} | Учебная тренировка) — устройство не подключено` });
       }
 
       logger.ws_success(`Активирована тревога №${alarm.id} (${alarm.name}) (тренировочный режим)`);
@@ -45,7 +45,7 @@ const activateAlarm = async (alarm, res) => {
     sent = wsServer.sendCommand('activatealarm', channel.pin_number);
     if (!sent) {
       logger.ws_error(`Не удалось активировать тревогу №${alarm.id} (${alarm.name}) — устройство не подключено`);
-      return res.status(503).json({ message: `Не удалось активировать тревогу №${alarm.id} (${alarm.name}) — устройство не подключено` });
+      return res.status(503).json({ errorMessage: `Не удалось активировать тревогу №${alarm.id} (${alarm.name}) — устройство не подключено` });
     }
 
     logger.ws_success(`Активирована тревога №${alarm.id} (${alarm.name}) (обычный режим)`);
@@ -57,7 +57,7 @@ const activateAlarm = async (alarm, res) => {
   } catch (err) {
     logger.ws_error(`Ошибка при активации канала: ${err.stack || err}`);
     if (!res.headersSent) {
-      return res.status(500).json({ message: 'Ошибка при активации канала', error: err.message || err });
+      return res.status(500).json({ errorMessage: 'Ошибка при активации канала', error: err.message || err });
     }
   }
 };

@@ -16,13 +16,13 @@ export default function DeviceItem({ device, onEdit, onDelete }) {
       <div className="flex gap-3">
         <button
           onClick={onEdit}
-          className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm font-medium"
+          className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm font-medium cursor-pointer"
         >
           Редактировать
         </button>
         <button
           onClick={onDelete}
-          className="px-3 py-1.5 bg-red-600 hover:bg-red-700 rounded-lg text-sm font-medium"
+          className="px-3 py-1.5 bg-red-600 hover:bg-red-700 rounded-lg text-sm font-medium cursor-pointer"
         >
           Удалить
         </button>

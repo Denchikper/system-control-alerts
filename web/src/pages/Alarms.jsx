@@ -35,7 +35,9 @@ export default function AlarmsPage() {
     try {
       const data = await getAlarms(token, logout, navigate);
       // fetchWithAuth может вернуть null при 401, защитимся:
-      setAlarms(Array.isArray(data) ? data : []);
+      if(data.ok) {
+        setAlarms(Array.isArray(data.data) ? data.data : []);
+      }
     } catch (err) {
       console.error("Ошибка загрузки тревог:", err);
       setError("Не удалось загрузить тревоги");

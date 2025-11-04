@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { getServerTime } from "../api/server/getServerTime"; // только серверное
-import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
 
-export default function ClockBar() {
-  const { token, logout } = useAuth();
-  const navigate = useNavigate();
+
+export default function ClockBar({ token, logout, navigate }) {
   const [localTime, setLocalTime] = useState({
     hours: 0,
     minutes: 0,
@@ -42,8 +39,9 @@ export default function ClockBar() {
 
   useEffect(() => {
     const fetchServerTime = async () => {
-      const time = await getServerTime(token, logout, navigate);
-      setServerTime(time);
+      const Time = await getServerTime(token, logout, navigate);
+      setServerTime(Time);
+
     };
     setLocalTime(getLocalTime());
     fetchServerTime(); // сразу при загрузке

@@ -13,12 +13,10 @@ function isTokenValid(token) {
 }
 
 export async function fetchWithAuth(token, url, options = {}, logout, navigate) {
-  // Проверяем токен заранее
   if (!isTokenValid(token)) {
-    console.warn("Токен недействителен, выполняем logout");
     if (logout) logout();
-    if (navigate) navigate("/login"); // или window.location.reload()
-    return null; // отменяем запрос
+    if (navigate) navigate("/login");
+    return { ok: false, status: 401, data: "Токен недействителен" };
   }
 
   try {
@@ -31,21 +29,16 @@ export async function fetchWithAuth(token, url, options = {}, logout, navigate) 
       },
     });
 
-    if (res.status === 401) {
-      console.warn("Токен стал недействительным во время запроса, выполняем logout");
-      if (logout) logout();
-      if (navigate) navigate("/login");
-      return null;
-    }
+    let data;
+    try { data = await res.json(); } catch { data = await res.text(); }
 
     if (!res.ok) {
-      const text = await res.text();
-      throw new Error(text || `Ошибка сервера: ${res.status}`);
+      return { ok: false, status: res.status, data };
     }
 
-    return res.json();
+    return { ok: true, status: res.status, data };
   } catch (err) {
     console.error("Ошибка при fetchWithAuth:", err);
-    return null;
+    return { ok: false, status: 0, data: err.message };
   }
 }

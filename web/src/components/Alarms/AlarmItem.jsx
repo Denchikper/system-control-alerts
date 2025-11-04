@@ -11,13 +11,13 @@ export default function AlarmItem({ alarm, onEdit, onDelete }) {
       <div className="flex space-x-3">
         <button
           onClick={() => onEdit(alarm.id)}
-          className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm font-medium"
+          className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm font-medium cursor-pointer"
         >
           Редактировать
         </button>
         <button
           onClick={() => onDelete(alarm.id)}
-          className="px-3 py-1.5 bg-red-600 hover:bg-red-700 rounded-lg text-sm font-medium"
+          className="px-3 py-1.5 bg-red-600 hover:bg-red-700 rounded-lg text-sm font-medium cursor-pointer"
         >
           Удалить
         </button>

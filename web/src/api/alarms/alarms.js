@@ -23,3 +23,14 @@ export async function deleteAlarm(token, id, logout, navigate) {
     method: "DELETE"
   }, logout, navigate);
 }
+
+export async function activateAlarm(token, id, logout, navigate) {
+  return await fetchWithAuth(token, `/alarm/activate`, {
+    method: "POST",
+    body: JSON.stringify({ id }),
+  }, logout, navigate);
+}
+
+export async function deactivateAlarm(token, logout, navigate) {
+  return await fetchWithAuth(token, `/alarm/deactivate`, { method: "POST", }, logout, navigate);
+}

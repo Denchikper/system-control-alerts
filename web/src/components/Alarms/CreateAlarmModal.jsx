@@ -79,12 +79,12 @@ export default function CreateAlarmModal({ isOpen, onClose, onCreate, initialDat
           </div>
 
           {/* Канал */}
-          <div className="relative">
+          <div className="relative ">
             <label className="block text-sm text-gray-400 mb-1">Канал</label>
             <div
               onClick={toggleDropdown}
               className="w-full bg-[#0E1117] border border-gray-600 rounded-lg px-3 py-2 text-gray-100 cursor-pointer flex justify-between items-center 
-                         focus:outline-none focus:border-blue-500 transition-all duration-200"
+                         focus:outline-none focus:border-blue-500 transition-all duration-200 "
             >
               <span>{channelOptions.find((opt) => opt.value === channel)?.label}</span>
               <svg
@@ -131,13 +131,13 @@ export default function CreateAlarmModal({ isOpen, onClose, onCreate, initialDat
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition-all duration-200 text-sm"
+              className="px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition-all duration-200 text-sm cursor-pointer"
             >
               Отмена
             </button>
             <button
               type="submit"
-              className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 transition-all duration-200 text-sm font-medium"
+              className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 transition-all duration-200 text-sm font-medium cursor-pointer"
             >
               {initialData ? "Сохранить" : "Создать"}
             </button>
