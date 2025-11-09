@@ -3,11 +3,11 @@
 #include "alarmManager.h"
 
 // --------- Настройки Ethernet ---------
-IPAddress local_IP(192, 168, 1, 122);
-IPAddress gateway(192, 168, 1, 1);
-IPAddress subnet(255, 255, 255, 0);
-IPAddress primaryDNS(192, 168, 1, 1);
-IPAddress secondaryDNS(8, 8, 8, 8);
+IPAddress local_IP(172, 16, 7, 102);
+IPAddress gateway(172, 16, 4, 2);
+IPAddress subnet(255, 255, 248, 0);
+IPAddress primaryDNS(172, 16, 4, 2);
+IPAddress secondaryDNS(8,8,8,8);
 
 void setup() {
   delay(1000);
