@@ -7,8 +7,8 @@
 #define RELAY_CH3 5
 #define RELAY_CH4 3
 #define RELAY_CH5 14
-#define RELAY_CH7 17
-#define RELAY_CH8 15
+#define RELAY_CH6 17
+#define RELAY_CH7 15
 
 struct ChannelDelay {
   int channel;
@@ -32,8 +32,8 @@ void deactivateAllRelays() {
   digitalWrite(RELAY_CH3, HIGH);
   digitalWrite(RELAY_CH4, HIGH);
   digitalWrite(RELAY_CH5, HIGH);
+  digitalWrite(RELAY_CH6, HIGH);
   digitalWrite(RELAY_CH7, HIGH);
-  digitalWrite(RELAY_CH8, HIGH);
 }
 
 void setupAlarm() {
@@ -42,8 +42,8 @@ void setupAlarm() {
   pinMode(RELAY_CH3, OUTPUT);
   pinMode(RELAY_CH4, OUTPUT);
   pinMode(RELAY_CH5, OUTPUT);
+  pinMode(RELAY_CH6, OUTPUT);
   pinMode(RELAY_CH7, OUTPUT);
-  pinMode(RELAY_CH8, OUTPUT);
 
   deactivateAllRelays();
 }
@@ -58,8 +58,8 @@ void setRelayState(int channel, bool state) {
     case 3: digitalWrite(RELAY_CH3, pinState); break;
     case 4: digitalWrite(RELAY_CH4, pinState); break;
     case 5: digitalWrite(RELAY_CH5, pinState); break;
+    case 6: digitalWrite(RELAY_CH6, pinState); break;
     case 7: digitalWrite(RELAY_CH7, pinState); break;
-    case 8: digitalWrite(RELAY_CH8, pinState); break;
     default: break;
   }
 }

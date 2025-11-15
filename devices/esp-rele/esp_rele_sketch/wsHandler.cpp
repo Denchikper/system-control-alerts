@@ -7,7 +7,7 @@
 using namespace websockets;
 
 WebsocketsClient client;
-const char* ws_server = "ws://192.168.1.99:2255";
+const char* ws_server = "ws://172.16.4.21:2255";
 const char* NameDevice = "WT32-ETH01_Relay_device";
 
 unsigned long lastPing = 0;
