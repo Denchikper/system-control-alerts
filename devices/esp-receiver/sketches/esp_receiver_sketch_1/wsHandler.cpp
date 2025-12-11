@@ -1,20 +1,16 @@
-#include <ETH.h>
 #include "wsHandler.h"
-#include "alarmManager.h"
 #include <ArduinoJson.h>
 #include <ArduinoWebsockets.h>
 
-using namespace websockets;
-
 WebsocketsClient client;
-const char* NameDevice = "WT32-ETH01_Relay_device";
+
+const char* NameDevice = "WT32-ETH01_Receiver_Device_1";
 
 unsigned long lastPing = 0;
 unsigned long lastReconnectAttempt = 0;
 bool isRegistered = false;  // Флаг регистрации
 const char* current_server = nullptr;
 
-// -------------------- Обработка сообщений --------------------
 void handleMessage(WebsocketsMessage message) {
 
   StaticJsonDocument<200> doc;
@@ -29,8 +25,7 @@ void handleMessage(WebsocketsMessage message) {
   if(type == "ping") {
     return; // сервер может присылать ping
   }
-
-  handleAlarmCommand(message.data());
+  
 }
 
 // -------------------- Отправка ping --------------------
@@ -42,12 +37,9 @@ void sendPing() {
   client.send(json);
 }
 
-// -------------------- Подключение к серверу --------------------
 void connectToServer(const char* ip_server) {
   current_server = ip_server;
   if(client.connect(ip_server)) {
-    
-    // Отправляем регистрацию только если ещё не зарегистрированы
     if(!isRegistered) {
       StaticJsonDocument<200> doc;
       doc["type"] = "register";
@@ -59,26 +51,22 @@ void connectToServer(const char* ip_server) {
   }
 }
 
-// -------------------- Основной цикл обработки WS --------------------
 void pollWS() {
   client.poll();
   client.onMessage(handleMessage);
 
-  if (millis() - lastPing > 10000) {
+  if(millis() - lastPing > 10000) {
     sendPing();
     lastPing = millis();
   }
 
-  // Если соединение потеряно
   if(!client.available()) {
     isRegistered = false;
 
     unsigned long now = millis();
-    if(now - lastReconnectAttempt > 5000) {
-      if (current_server != nullptr) {
-        connectToServer(current_server);
-      }
-      lastReconnectAttempt = now;
+    if (current_server != nullptr) {
+      connectToServer(current_server);
     }
+    lastReconnectAttempt = now;
   }
 }

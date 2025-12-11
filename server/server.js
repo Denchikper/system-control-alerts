@@ -29,7 +29,8 @@ const startServer = async () => {
   
     logger.ws_success('WebSocket сервер запущен!');
   } catch (err) {
-    logger.server_error('Ошибка запуска сервера:', err);
+    logger.server_error('Ошибка запуска сервера:');
+    console.log(err)
   }
 };
 

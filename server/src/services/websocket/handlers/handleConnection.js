@@ -1,4 +1,3 @@
-// server/handlers/handleConnection.js
 const logger = require('../../../utils/logger');
 const handleMessage = require('./handleMessage');
 const handleClose = require('./handleClose');
@@ -13,7 +12,6 @@ module.exports = async (server, ws, req) => {
 
   logger.ws_warn(`Попытка подключения с IP: ${clientIp}`);
 
-  // Обрабатываем все сообщения
   ws.on('message', async (msg) => {
     try {
       const data = JSON.parse(msg);
@@ -21,6 +19,11 @@ module.exports = async (server, ws, req) => {
       // Ping для heartbeat
       if (data.type === 'ping') {
         ws.isAlive = true;
+        return;
+      }
+
+      if (data.type === 'remoteCommand') {
+        console.log(data.data)
         return;
       }
 
@@ -37,20 +40,29 @@ module.exports = async (server, ws, req) => {
           return;
         }
 
+        // Проверяем, если уже есть такое устройство
+        if (server.devices.has(device.id)) {
+          const oldWs = server.devices.get(device.id);
+          if (oldWs !== ws) {
+            oldWs.terminate(); // Закрываем старое соединение
+            logger.ws_warn(`Старое соединение устройства "${device.device_name}" закрыто`);
+          }
+        }
+
+        // Добавляем или обновляем устройство
+        server.devices.set(device.id, ws);
+        ws.deviceId = device.id;
+        ws.deviceName = device.device_name;
+
+        // Обновляем статус в БД
         device.is_online = true;
         await device.save();
 
-        server.device = ws;
-        server.deviceName = data.nameDevice;
-        ws.deviceName = data.nameDevice;
-        ws.deviceId = device.id;
-
-        logger.ws_success(`Устройство "${data.nameDevice}" (${clientIp}) подключено.`);
+        logger.ws_success(`Устройство "${device.device_name}" (${clientIp}) подключено.`);
         ws.send(JSON.stringify({ type: 'registered' }));
         return;
       }
 
-      // Любые другие сообщения после регистрации
       handleMessage(server, ws, data);
 
     } catch (err) {
@@ -59,6 +71,6 @@ module.exports = async (server, ws, req) => {
     }
   });
 
-  ws.on('close', () => handleClose(server, ws));  // вызываем наш handleClose
-  ws.on('error', (err) => handleError(server, ws, err));  // вызываем handleError
+  ws.on('close', () => handleClose(server, ws));
+  ws.on('error', (err) => handleError(server, ws, err));
 };
