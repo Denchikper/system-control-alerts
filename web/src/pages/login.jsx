@@ -26,9 +26,7 @@ export default function Login() {
 
     try {
       const data = await loginUser(formData);
-      console.log("✅ Успешный вход:", data);
 
-      // ✅ сохраняем токен (если есть в ответе)
       if (data.token) {
         login(data.token);
       }

@@ -3,6 +3,7 @@ const handleMessage = require('./handleMessage');
 const handleClose = require('./handleClose');
 const handleError = require('./handleError');
 const Device = require('../../../models/Devices');
+const { remoteHandler } = require('../../remote/remoteHandler');
 
 module.exports = async (server, ws, req) => {
   const clientIp = req.socket.remoteAddress.replace('::ffff:', '');
@@ -17,12 +18,12 @@ module.exports = async (server, ws, req) => {
       const data = JSON.parse(msg);
       // Ping для heartbeat
       if (data.type === 'ping') {
-        ws.isAlive = true;
+        ws.isAlive = true;  
         return;
       }
 
       if (data.type === 'remoteCommand') {
-        console.log(data)
+        remoteHandler(data.receiver_id, data.data)
         return;
       }
 

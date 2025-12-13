@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import ProfileMenu from "./ProfileMenu";
 import { useNavigate } from "react-router-dom";
 
+
+
 export default function Navbar() {
   const navigate = useNavigate();
 

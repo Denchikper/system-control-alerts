@@ -1,8 +1,12 @@
+const dotenv = require('dotenv');
+const path = require('path');
+
+const env = process.env.NODE_ENV || 'development';
+dotenv.config({ path: path.resolve(__dirname, `.env.${env}`) });
+
 const app = require('./src/app');
 const logger = require('./src/utils/logger');
-// const syncTime = require('./src/utils/timeSyncService');
 const wsSingleton = require('./src/services/websocket/wsSingleton');
-
 const { testConnectionDB } = require('./src/test/testConnectionDB');
 const { syncDatabase } = require('./src/utils/databaseSync');
 const { resetDeviceStatus } = require('./src/services/websocket/resetDeviceStatus');
@@ -18,14 +22,12 @@ const startServer = async () => {
     await syncDatabase();
     await resetDeviceStatus();
     
-    // await syncTime( ); // Синхронизируем время и выводим актуальное
-    
+
     const server = app.listen(SERVER_PORT, SERVER_IP, () => {
       logger.server_success(`Сервер запущен на http://${SERVER_IP}:${SERVER_PORT}`);
     });
 
     wsSingleton.init(server);
-
   
     logger.ws_success('WebSocket сервер запущен!');
   } catch (err) {

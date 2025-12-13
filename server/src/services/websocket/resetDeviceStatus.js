@@ -1,4 +1,4 @@
-const Device = require('../../models/Devices');
+const Device = require('../../models/Devices');     
 const logger = require('../../utils/logger');
 
 async function resetDeviceStatus(){

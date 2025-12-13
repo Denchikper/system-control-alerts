@@ -9,6 +9,9 @@ router.use('/alarm/deactivate', require('./protected/alarms/deactivateAlarm.rout
 
 router.use('/user/get-profile', require('./protected/getProfile.route'));
 
+router.use('/user/duty-change-pass', require('./protected/user/changeDutyPass.route'));
+router.use('/user/change-pass', require('./protected/user/userChangePass.route'));
+
 router.use('/server/server-time', require('./protected/server/serverTime.route'));
 router.use('/server/server-status', require('./protected/server/serverStatus.route'));
 
