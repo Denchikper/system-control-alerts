@@ -8,6 +8,7 @@ module.exports = (server, ws, message) => {
 
     if (data.type === 'ping') {
       ws.isAlive = true;
+      console.log(data)
       return;
     }
 

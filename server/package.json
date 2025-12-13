@@ -15,14 +15,17 @@
   "type": "commonjs",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "cross-env NODE_ENV=production node server.js",
+    "preview": "cross-env NODE_ENV=production nodemon server.js",
+    "dev": "cross-env NODE_ENV=development nodemon server.js",
+    "dev:debug": "cross-env NODE_ENV=development nodemon --inspect server.js"
   },
   "dependencies": {
     "@sequelize/postgres": "^7.0.0-alpha.46",
     "bcryptjs": "^3.0.2",
     "chalk": "^4.1.2",
     "cors": "^2.8.5",
+    "cross-env": "^10.1.0",
     "dotenv": "^16.3.1",
     "express": "^5.1.0",
     "helmet": "^8.1.0",

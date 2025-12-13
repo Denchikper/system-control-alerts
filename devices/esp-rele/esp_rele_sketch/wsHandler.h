@@ -5,6 +5,6 @@
 using namespace websockets;
 
 void pollWS();
-void connectToServer();
+void connectToServer(const char* ip_server);
 
 #endif

@@ -4,8 +4,11 @@ const Channel = require('../../models/Channel');
 const deactivateAlarm = require('./deactivateAlarm');
 const Alarm = require('../../models/Alarm');
 
+const DEVICE_ID = 'a41942b7-4f77-4b13-90d5-da88294125f1'; // конкретное устройство
+
 const activateAlarm = async (alarm, res) => {
   try {
+    // Деактивация уже активной тревоги
     const activeAlarm = await Alarm.findOne({ where: { is_active: true } });
     if (activeAlarm) {
       await deactivateAlarm();
@@ -23,13 +26,18 @@ const activateAlarm = async (alarm, res) => {
 
     if (alarm.is_drill) {
       const drillChannel = await Channel.findOne({ where: { is_drill: true } });
-      
       if (!drillChannel) {
         logger.ws_error('Канал для включения тренировки не найден');
         return res.status(404).json({ errorMessage: 'Канал для включения тренировки не найден' });
       }
 
-      sent = wsServer.sendCommand('activatealarm', [drillChannel.pin_number, drillChannel.duration, channel.pin_number, channel.duration]);
+      // Отправка команды на конкретное устройство
+      sent = wsServer.sendCommandToDevice(
+        DEVICE_ID,
+        'activatealarm',
+        [drillChannel.pin_number, drillChannel.duration, channel.pin_number, channel.duration]
+      );
+
       if (!sent) {
         logger.ws_error(`Не удалось активировать тревогу №${alarm.id} (${alarm.name} | Учебная тренировка) — устройство не подключено`);
         return res.status(503).json({ errorMessage: `Не удалось активировать тревогу №${alarm.id} (${alarm.name} | Учебная тренировка) — устройство не подключено` });
@@ -42,7 +50,8 @@ const activateAlarm = async (alarm, res) => {
     }
 
     // === Обычный режим ===
-    sent = wsServer.sendCommand('activatealarm', channel.pin_number);
+    sent = wsServer.sendCommandToDevice(DEVICE_ID, 'activatealarm', channel.pin_number);
+
     if (!sent) {
       logger.ws_error(`Не удалось активировать тревогу №${alarm.id} (${alarm.name}) — устройство не подключено`);
       return res.status(503).json({ errorMessage: `Не удалось активировать тревогу №${alarm.id} (${alarm.name}) — устройство не подключено` });

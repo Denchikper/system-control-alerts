@@ -1,36 +1,62 @@
 import { API_BASE_URL } from "../config";
+import { jwtDecode } from "jwt-decode";
 
-// helper для проверки валидности JWT токена
 function isTokenValid(token) {
   if (!token) return false;
+
   try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    const exp = payload.exp; // время истечения в секундах
-    return Date.now() / 1000 < exp;
-  } catch {
+    const decoded = jwtDecode(token);
+    if (!decoded.exp) return false;
+
+    const now = Math.floor(Date.now() / 1000);
+    return now < decoded.exp;
+  } catch (err) {
+    console.error("Token validation error:", err);
     return false;
   }
 }
 
-export async function fetchWithAuth(token, url, options = {}, logout, navigate) {
+export async function fetchWithAuth(
+  token,
+  url,
+  options = {},
+  logout,
+  navigate
+) {
   if (!isTokenValid(token)) {
-    if (logout) logout();
-    if (navigate) navigate("/login");
-    return { ok: false, status: 401, data: "Токен недействителен" };
+    logout?.();
+    navigate?.("/login");
+
+    return {
+      ok: false,
+      status: 401,
+      data: "Токен недействителен",
+    };
   }
 
   try {
     const res = await fetch(`${API_BASE_URL}${url}`, {
       ...options,
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
         ...(options.headers || {}),
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
 
     let data;
-    try { data = await res.json(); } catch { data = await res.text(); }
+    const contentType = res.headers.get("content-type");
+
+    if (contentType?.includes("application/json")) {
+      data = await res.json();
+    } else {
+      data = await res.text();
+    }
+
+    if (res.status === 401) {
+      logout?.();
+      navigate?.("/login");
+    }
 
     if (!res.ok) {
       return { ok: false, status: res.status, data };
@@ -39,6 +65,10 @@ export async function fetchWithAuth(token, url, options = {}, logout, navigate) 
     return { ok: true, status: res.status, data };
   } catch (err) {
     console.error("Ошибка при fetchWithAuth:", err);
-    return { ok: false, status: 0, data: err.message };
+    return {
+      ok: false,
+      status: 0,
+      data: err.message || "Network error",
+    };
   }
 }

@@ -7,12 +7,12 @@
 using namespace websockets;
 
 WebsocketsClient client;
-const char* ws_server = "ws://172.16.4.21:2255";
 const char* NameDevice = "WT32-ETH01_Relay_device";
 
 unsigned long lastPing = 0;
 unsigned long lastReconnectAttempt = 0;
 bool isRegistered = false;  // Флаг регистрации
+const char* current_server = nullptr;
 
 // -------------------- Обработка сообщений --------------------
 void handleMessage(WebsocketsMessage message) {
@@ -43,9 +43,10 @@ void sendPing() {
 }
 
 // -------------------- Подключение к серверу --------------------
-void connectToServer() {
-  if(client.connect(ws_server)) {
-
+void connectToServer(const char* ip_server) {
+  current_server = ip_server;
+  if(client.connect(ip_server)) {
+    
     // Отправляем регистрацию только если ещё не зарегистрированы
     if(!isRegistered) {
       StaticJsonDocument<200> doc;
@@ -63,19 +64,20 @@ void pollWS() {
   client.poll();
   client.onMessage(handleMessage);
 
-  // Отправка ping каждые 10 секунд
-  if(millis() - lastPing > 10000) {
+  if (millis() - lastPing > 10000) {
     sendPing();
     lastPing = millis();
   }
 
-  // Если соединение потеряно, сбрасываем флаг регистрации и переподключаемся
+  // Если соединение потеряно
   if(!client.available()) {
-    isRegistered = false;  // сброс флага, чтобы при reconnect отправился register
+    isRegistered = false;
 
     unsigned long now = millis();
     if(now - lastReconnectAttempt > 5000) {
-      connectToServer();
+      if (current_server != nullptr) {
+        connectToServer(current_server);
+      }
       lastReconnectAttempt = now;
     }
   }

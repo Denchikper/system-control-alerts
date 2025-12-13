@@ -1,10 +1,10 @@
 const deactivateAlarm = require('../../services/Alarm/deactivateAlarm');
+const deactivateAlarmRemote = require('../../services/remote/commands/deactivateAlarmRemote');
 const logger = require('../../utils/logger');
 
 exports.deactivateAlarmController = async (req, res) => {
 
   try {
-
     deactivateAlarm(res);
 
   } catch (err) {

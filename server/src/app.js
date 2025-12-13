@@ -3,8 +3,6 @@ const cors = require('cors');
 const helmet = require('helmet');
 const app = express();
 
-require('dotenv').config();
-
 const routes = require('./routers');
 
 app.use(cors());

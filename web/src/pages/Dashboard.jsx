@@ -5,6 +5,7 @@ import SystemStatus from "../components/SystemStatus";
 import AlarmControlPanel from "../components/AlarmControlPanel";
 
 import { useNavigate } from "react-router-dom";
+import ChangeDutyPanel from "../components/changeDutyPanel";
 
 export default function Dashboard() {
   const { token, logout } = useAuth();
@@ -27,6 +28,11 @@ export default function Dashboard() {
         navigate={navigate}/>
 
         <AlarmControlPanel
+          token={token}
+          logout={logout}
+          navigate={navigate}
+        />
+        <ChangeDutyPanel
           token={token}
           logout={logout}
           navigate={navigate}

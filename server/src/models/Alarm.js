@@ -8,11 +8,11 @@ const Alarm = sequelize.define('Alarm', {
     defaultValue: DataTypes.UUIDV4
   },
   name: {
-    type: DataTypes.STRING(100),
+    type: DataTypes.STRING,
     allowNull: false
   },
-  description: {
-    type: DataTypes.TEXT,
+  name_remote: {
+    type: DataTypes.STRING,
     allowNull: true
   },
   is_drill: {

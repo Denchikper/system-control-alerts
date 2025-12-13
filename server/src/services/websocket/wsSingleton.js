@@ -1,3 +1,4 @@
+//wsSingleton.js
 const WebSocketServerClass = require('./websocket-server');
 
 let wsServer = null;
