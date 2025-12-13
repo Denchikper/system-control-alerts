@@ -1,2 +1,3 @@
 database
-debug/node_modules
+debug/
+node_modules

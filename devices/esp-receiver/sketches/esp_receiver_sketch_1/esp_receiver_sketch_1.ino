@@ -4,7 +4,6 @@
 
 // ---- Dev/Prod ----
 #define DEV_PIN 36
-
 bool isDev = false;
 const char* ETH_HOSTNAME = "System-control-alerts-receiver_device_1";
 
@@ -29,46 +28,52 @@ const char* prod_ws = "ws://172.16.4.21:2255";
 #define NRF_MOSI 15
 #define NRF_MISO 5
 
+String nrfBuffer = "";
+
 // Колбэк для приёма nRF
-void onNRFReceive(const char* data) {
-    if(client.available()) {
-        StaticJsonDocument<200> doc;
-        doc["type"] = "remoteCommand";
-        doc["receiver_id"] = 1;
-        doc["data"] = data;
-        String json;
-        serializeJson(doc, json);
-        client.send(json);
-        }
+void onNRFReceive(const char* data, size_t len) {
+    if (!client.available()) return;
+
+    // data уже полный JSON
+    StaticJsonDocument<300> doc;
+    doc["type"] = "remoteCommand";
+    doc["receiver_id"] = 1;
+
+    StaticJsonDocument<200> arduinoDoc;
+    DeserializationError err = deserializeJson(arduinoDoc, data, len);
+
+    if(err) {
+        // Если JSON битый (маловероятно)
+        doc["data"] = String(data).substring(0, len);
+    } else {
+        // Отлично — передаём как JSON
+        doc["data"] = arduinoDoc;
+    }
+
+    String json;
+    serializeJson(doc, json);
+    client.send(json); // отправляем на сервер
 }
 
 void setup() {
     delay(1000);
 
-    // Определяем режим dev/prod
     pinMode(DEV_PIN, INPUT_PULLUP);
     isDev = (digitalRead(DEV_PIN) == LOW);
 
-    // Инициализация Ethernet
     ETH.begin();
     ETH.setHostname(ETH_HOSTNAME);
 
-    if(isDev) {
+    if(isDev)
         ETH.config(dev_IP, dev_gateway, dev_subnet, dev_dns, dev_dns);
-    } else {
+    else
         ETH.config(prod_IP, prod_gateway, prod_subnet, prod_dns, prod_dns);
-    }
 
     while(!ETH.linkUp()) delay(100);
 
-    // Подключаемся к серверу
-    if(isDev) {
-        connectToServer(dev_ws);
-    } else {
-        connectToServer(prod_ws);
-    }
+    if(isDev) connectToServer(dev_ws);
+    else connectToServer(prod_ws);
 
-    // Инициализация nRF24
     initNRF(NRF_CE, NRF_CSN, NRF_SCK, NRF_MOSI, NRF_MISO);
 }
 

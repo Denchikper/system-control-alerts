@@ -15,7 +15,6 @@ module.exports = async (server, ws, req) => {
   ws.on('message', async (msg) => {
     try {
       const data = JSON.parse(msg);
-
       // Ping для heartbeat
       if (data.type === 'ping') {
         ws.isAlive = true;
@@ -23,7 +22,12 @@ module.exports = async (server, ws, req) => {
       }
 
       if (data.type === 'remoteCommand') {
-        console.log(data.data)
+        console.log(data)
+        return;
+      }
+
+      if (data.type === 'error') {
+        console.log(data)
         return;
       }
 

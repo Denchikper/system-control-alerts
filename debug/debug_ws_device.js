@@ -1,14 +1,12 @@
 const WebSocket = require('ws');
 
-// Каждый “устройство” запускается как отдельный клиент для отладки
 const NameDevice = "Device-DEBUG";
-const SERVER_URL = 'ws://192.168.1.99:2255'; // Адрес основного сервера
+const SERVER_URL = 'ws://192.168.1.99:2255';
 
 const ws = new WebSocket(SERVER_URL);
 
 ws.on('open', () => {
   console.log(`🔗 Устройство подключено к серверу`);
-  // При подключении отправляем идентификатор устройства
   ws.send(JSON.stringify({ type: 'register', nameDevice: NameDevice }));
 });
 

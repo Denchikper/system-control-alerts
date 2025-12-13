@@ -1,7 +1,7 @@
 <table>
   <tr>
     <td>
-      <img src="./web/public/Frame 423.png" alt="Логотип" width="80"/>
+      <img src="./web/public/icon.png" alt="Логотип" width="80"/>
     </td>
     <td>
       <h1>Система управления звуковыми оповещениями</h1>
