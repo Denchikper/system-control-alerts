@@ -8,7 +8,7 @@ export default function CreateAlarmModal({ isOpen, onClose, onCreate, initialDat
   const [isDrill, setIsDrill] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const channelOptions = Array.from({ length: 8 }, (_, i) => ({
+  const channelOptions = Array.from({ length: 6 }, (_, i) => ({
     value: i + 1,
     label: `Канал ${i + 1}`,
   }));

@@ -41,15 +41,15 @@ export default function Login() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-[#0E1117] text-gray-200 relative">
-      <header className="flex items-center justify-start px-6 py-4 border-b border-gray-700 select-none">
+    <div className="flex flex-col h-screen bg-[#0E1117] text-gray-200 relative ">
+      <header className="flex items-center justify-start px-6 py-2 border-b border-gray-700 select-none">
         <img
           src="/icon.png"
           alt="logo"
           className="w-10 h-10 mr-3 pointer-events-none select-none"
         />
         <div className="w-px h-8 bg-gray-700 mx-3"></div>
-        <h1 className="text-lg font-semibold text-gray-100">
+        <h1 className="text-[15px] font-semibold text-gray-100">
           Система управления звуковыми оповещениями
         </h1>
       </header>

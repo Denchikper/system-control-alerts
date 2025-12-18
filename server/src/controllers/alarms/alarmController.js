@@ -3,7 +3,7 @@ const Alarm = require('../../models/Alarm');
 // Получить все тревоги
 exports.getAllAlarms = async (req, res) => {
   try {
-    const alarms = await Alarm.findAll({ order: [['id', 'ASC']] });
+    const alarms = await Alarm.findAll();
     res.json(alarms);
   } catch (err) {
     console.error('Ошибка получения тревог:', err);
