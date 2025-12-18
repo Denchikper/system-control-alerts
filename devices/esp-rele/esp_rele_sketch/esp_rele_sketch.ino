@@ -30,7 +30,7 @@ void setup() {
   ETH.setHostname(ETH_HOSTNAME);
 
   if (isDev) {
-    ETH.config(dev_IP, dev_gateway, dev_subnet, dev_dns, dev_dns);
+    ETH.config(prod_IP, prod_gateway, prod_subnet, prod_dns, prod_dns);
   } else {
     ETH.config(prod_IP, prod_gateway, prod_subnet, prod_dns, prod_dns);
   }
@@ -40,7 +40,8 @@ void setup() {
   setupAlarm();
 
   if (isDev) {
-    connectToServer("ws://192.168.1.99:2255");
+    // connectToServer("ws://192.168.1.99:2255");
+    connectToServer("ws://172.16.4.21:2255");
   } else {
     connectToServer("ws://172.16.4.21:2255");
   }
