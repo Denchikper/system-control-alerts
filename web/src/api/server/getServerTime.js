@@ -2,15 +2,35 @@
 import { fetchWithAuth } from "../fetchWithAuth";
 
 export async function getServerTime(token, logout, navigate) {
-  const data = await fetchWithAuth(token, "/server/server-time", { method: "GET" }, logout, navigate);
-  if (!data?.data.serverTime) return { hours: 0, minutes: 0, seconds: 0, date: new Date() };
+  const response = await fetchWithAuth(
+    token,
+    "/server/server-time",
+    { method: "GET" },
+    logout,
+    navigate
+  );
 
-  const serverDate = new Date(data.data.serverTime);
+  if (!response?.ok || !response.data?.serverTime) {
+    const now = new Date();
+    return {
+      hours: now.getHours(),
+      minutes: now.getMinutes(),
+      seconds: now.getSeconds(),
+      date: now
+    };
+  }
 
+  // Предполагаем, что сервер возвращает время в UTC
+  const serverDate = new Date(response.data.serverTime);
+  
+  // Корректная конвертация в локальное время пользователя
+  const localDate = new Date(serverDate.toISOString());
+  
   return {
-    hours: serverDate.getHours(),
-    minutes: serverDate.getMinutes(),
-    seconds: serverDate.getSeconds(),
-    date: serverDate,
+    hours: localDate.getHours(),
+    minutes: localDate.getMinutes(),
+    seconds: localDate.getSeconds(),
+    date: localDate,
+    isoString: serverDate.toISOString()
   };
 }

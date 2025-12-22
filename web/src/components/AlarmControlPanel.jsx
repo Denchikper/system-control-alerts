@@ -29,7 +29,6 @@ export default function AlarmControlPanel({ token, logout, navigate }) {
   const [confirmModal, setConfirmModal] = useState({ open: false, alarm: null });
   const [errorModal, setErrorModal] = useState({ open: false, message: "" });
   const alarmList = Array.isArray(alarms) ? alarms : [];
-  console.log(alarmList)
   const openConfirm = (alarm) => setConfirmModal({ open: true, alarm });
   const closeConfirm = () => setConfirmModal({ open: false, alarm: null });
 
