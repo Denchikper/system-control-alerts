@@ -25,7 +25,7 @@ export default function ChangeDutyPanel({ token, logout, navigate }) {
   return (
     <>
       {/* PANEL */}
-      <div className="w-[23%] min-w-[260px] h-[145px] bg-[#151A22] border border-gray-700 rounded-2xl p-6 shadow-xl flex flex-col justify-between transition-all duration-300">
+      <div className="w-[24%] min-w-[260px] h-[145px] bg-[#151A22] border border-gray-700 rounded-2xl p-6 shadow-xl flex flex-col justify-between transition-all duration-300">
         <h2 className="text-lg font-semibold text-gray-100 text-center">
           Смена дежурного администратора
         </h2>
