@@ -65,13 +65,13 @@ void setup() {
     ETH.setHostname(ETH_HOSTNAME);
 
     if(isDev)
-        ETH.config(dev_IP, dev_gateway, dev_subnet, dev_dns, dev_dns);
+        ETH.config(prod_IP, prod_gateway, prod_subnet, prod_dns, prod_dns);
     else
         ETH.config(prod_IP, prod_gateway, prod_subnet, prod_dns, prod_dns);
 
     while(!ETH.linkUp()) delay(100);
 
-    if(isDev) connectToServer(dev_ws);
+    if(isDev) connectToServer(prod_ws);
     else connectToServer(prod_ws);
 
     initNRF(NRF_CE, NRF_CSN, NRF_SCK, NRF_MOSI, NRF_MISO);

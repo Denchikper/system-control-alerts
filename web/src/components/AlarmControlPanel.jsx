@@ -83,7 +83,7 @@ export default function AlarmControlPanel({ token, logout, navigate }) {
   return (
     <>
       <div
-        className="w-[40%] bg-[#151A22] border border-gray-700 rounded-2xl p-6 shadow-lg
+        className="w-[41%] bg-[#151A22] border border-gray-700 rounded-2xl p-6 shadow-lg
                    transition-all duration-300 flex flex-col"
         style={{ height: alarms.length <= 8 ? `${160 + Math.ceil(alarms.length / 2) * 70}px` : "480px" }}
       >
