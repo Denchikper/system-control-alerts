@@ -18,6 +18,16 @@ exports.getScenarios = async (req, res) => {
   }
 };
 
+exports.getScenariosByDay = async (req, res) => {
+  const { scheduleId, dayId } = req.body;
+  try {
+    const scenarios = await ScheduleScenario.findOne({ where: { schedule_id: scheduleId, day_id: dayId }});
+    res.json(scenarios);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 exports.createScenario = async (req, res) => {
   try {
     const { schedule_id, day_id } = req.body;

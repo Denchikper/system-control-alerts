@@ -14,6 +14,10 @@ export async function activateSchedule(token, schedulesId, logout, navigate) {
   }, logout, navigate);
 }
 
+export async function deleteSchedules(token, id, logout, navigate) {
+  return await fetchWithAuth(token, `/alerts/schedules/${id}`, { method: "DELETE" }, logout, navigate);
+}
+
 export async function schedulesCreate(token, schedulesData, logout, navigate) {
   return await fetchWithAuth(token, "/alerts/schedules", {
     method: "POST",
@@ -21,8 +25,8 @@ export async function schedulesCreate(token, schedulesData, logout, navigate) {
   }, logout, navigate);
 }
 
-export async function schedulesUpdate(token, schedulesData, logout, navigate) {
-  return await fetchWithAuth(token, "/alerts/schedules", {
+export async function schedulesUpdate(token, id, schedulesData, logout, navigate) {
+  return await fetchWithAuth(token, `/alerts/schedules/${id}`, {
     method: "PUT",
     body: JSON.stringify(schedulesData)
   }, logout, navigate);

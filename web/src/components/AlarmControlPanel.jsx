@@ -4,7 +4,7 @@ import ErrorModal from "./ErrorModal";
 import { activateAlarm, deactivateAlarm } from "../api/alarms/alarms";
 import { getAlarms } from "../api/alarms/alarms";
 
-export default function AlarmControlPanel({ token, logout, navigate }) {
+export default function AlarmControlPanel({ token, logout, navigate, setActiveAlarm }) {
 
   useEffect (() => {
     const loadAlarms = async () => {
@@ -40,6 +40,8 @@ export default function AlarmControlPanel({ token, logout, navigate }) {
 
       if (!res.ok) {
         setErrorModal({ open: true, message: res.data.errorMessage });
+      } else {
+        setActiveAlarm(confirmModal.alarm.name)
       }
 
       closeConfirm();
@@ -63,8 +65,10 @@ export default function AlarmControlPanel({ token, logout, navigate }) {
 
       if (!res.ok) {
         setErrorModal({ open: true, message: res.data.errorMessage });
+      } else {
+        setActiveAlarm("Нет активных тревог")
       }
-
+      
       closeConfirm();
     } catch (err) {
       console.error("Ошибка при деактивации всех тревог:", err);

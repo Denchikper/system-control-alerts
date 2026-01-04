@@ -12,7 +12,7 @@ export default function DayCard({ name, events = [] }) {
       {/* Дополнительный контент */}
       <div className="w-full flex flex-col gap-2">
         {events.length === 0 ? (
-          <div className="text-gray-500 text-sm text-center mt-4">Нет событий</div>
+          <div className="text-gray-500 text-sm text-center mt-4">Нет уроков</div>
         ) : (
           events
             .sort((a, b) => a.event_order - b.event_order) // сортируем по порядку

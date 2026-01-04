@@ -18,7 +18,7 @@ export default function PlannedAlertsPage() {
   }, []);
 
   return (
-    <div className="flex flex-col h-screen bg-[#0E1117] text-gray-200">
+    <div className="min-h-screen bg-[#0E1117] text-gray-200 flex flex-col select-none">
       <Navbar />
       <div className="flex-1 flex flex-col items-center p-6">
 
@@ -44,7 +44,7 @@ export default function PlannedAlertsPage() {
         </div>
 
         {/* Контент */}
-        <div className="w-full rounded-xl p-2">
+        <div className="w-full rounded-xl p-2 scrollbar-hidden overflow-y-auto scrollbar-hidden">
           {loading && <p className="text-center text-gray-400">Загрузка...</p>}
 
           {activeTab === "school" && !loading && (

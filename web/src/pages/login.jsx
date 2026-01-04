@@ -41,7 +41,7 @@ export default function Login() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-[#0E1117] text-gray-200 relative ">
+    <div className="flex flex-col h-screen bg-[#0E1117] text-gray-200 relative">
       <header className="flex items-center justify-start px-6 py-2 border-b border-gray-700 select-none">
         <img
           src="/icon.png"

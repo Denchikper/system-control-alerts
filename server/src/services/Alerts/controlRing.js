@@ -21,7 +21,7 @@ const controlRing = async (data) => {
       sent = wsServer.sendCommandToDevice(DEVICE_ID, 'activatealarm', channel.pin_number);
 
       if (!sent) {
-        logger.alertengine_error(`Не удалось активировать тревогу №${alarm.id} (${alarm.name}) — устройство не подключено`);
+        logger.alertengine_error(`Устройство не подключено!`);
         return
       }
 

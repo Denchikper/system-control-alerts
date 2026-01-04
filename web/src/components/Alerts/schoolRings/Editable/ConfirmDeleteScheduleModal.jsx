@@ -1,0 +1,32 @@
+import React from "react";
+
+export default function ConfirmDeleteScheduleModal({ isOpen, onClose, onConfirm, scheduleName }) {
+  if (!isOpen) return null;
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-[#151A22] border border-gray-700 rounded-2xl p-6 w-full max-w-sm shadow-xl animate-fadeIn">
+        <h2 className="text-xl font-semibold text-center mb-3">Удалить расписание</h2>
+        <p className="text-gray-300 text-center mb-6">
+          Вы уверены, что хотите удалить расписание{" "}
+          <span className="text-red-400 font-semibold">"{scheduleName.name}"</span>?
+        </p>
+
+        {/* Кнопки теперь по центру */}
+        <div className="flex justify-center space-x-4">
+          <button
+            onClick={onClose}
+            className="px-5 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition text-sm font-medium"
+          >
+            Отмена
+          </button>
+          <button
+            onClick={onConfirm}
+            className="px-5 py-2 rounded-lg bg-red-600 hover:bg-red-700 transition text-sm font-medium"
+          >
+            Удалить
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}

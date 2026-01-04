@@ -2,10 +2,9 @@
   import { getServerStatus } from "../api/server/getServerStatus";
   import ClockBar from "./ClockBar";
   
-  export default function SystemStatus({ token, logout, navigate }) {
+  export default function SystemStatus({ token, logout, navigate, activeAlarm, setActiveAlarm }) {
 
     const [devicesList, setDevicesList] = useState([]);
-    const [activeAlarm, setActiveAlarm] = useState("Нет активных тревог");
     const [serverConnected, setServerConnected] = useState(false); // новый флаг
 
     useEffect(() => {

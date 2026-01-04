@@ -6,7 +6,6 @@ const ScheduleEvent = sequelize.define('ScheduleEvent', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   scenario_id: { type: DataTypes.INTEGER, allowNull: false },
   event_order: { type: DataTypes.INTEGER, allowNull: false },
-  event_type: { type: DataTypes.ENUM('lesson', 'break'), allowNull: false },
   start_time: { type: DataTypes.TIME, allowNull: false },
   end_time: { type: DataTypes.TIME, allowNull: false },
   channel_id: { type: DataTypes.INTEGER, allowNull: false } // ссылка на Channel

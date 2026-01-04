@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const plannedAlertController = require('../../../controllers/alerts/plannedAlertController');
+const authMiddleware = require('../../../middleware/authMiddleware');
 
-router.get('/', plannedAlertController.getPlannedAlerts);
-router.post('/', plannedAlertController.createPlannedAlert);
+router.get('/', authMiddleware, plannedAlertController.getPlannedAlerts);
+router.post('/', authMiddleware, plannedAlertController.createPlannedAlert);
 
 module.exports = router;
