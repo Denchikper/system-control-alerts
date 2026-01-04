@@ -8,7 +8,7 @@ export default function Navbar() {
   return (
     <div className="flex items-center justify-between px-6 py-2 bg-[#0E1117] border-b border-gray-700">
       {/* Логотип слева */}
-      <div className="flex items-center select-none pointer-events-none flex-shrink-0" draggable={false}>
+      <div className="flex items-center select-none pointer-events-none shrink-0" draggable={false}>
         <img 
           src="/icon.png" 
           alt="logo" 
@@ -53,7 +53,7 @@ export default function Navbar() {
       </div>
 
       {/* Профиль справа */}
-      <div className="flex-shrink-0 select-none">
+      <div className="shrink-0 select-none">
         <ProfileMenu />
       </div>
     </div>

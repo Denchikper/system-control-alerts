@@ -3,12 +3,12 @@ import StyledCheckbox from "../ui/StyledCheckbox";
 
 export default function CreateAlarmModal({ isOpen, onClose, onCreate, initialData }) {
   const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+  const [name_remote, setName_remote] = useState("");
   const [channel, setChannel] = useState(1);
   const [isDrill, setIsDrill] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const channelOptions = Array.from({ length: 6 }, (_, i) => ({
+  const channelOptions = Array.from({ length: 5 }, (_, i) => ({
     value: i + 1,
     label: `Канал ${i + 1}`,
   }));
@@ -17,12 +17,12 @@ export default function CreateAlarmModal({ isOpen, onClose, onCreate, initialDat
     if (isOpen) {
       if (initialData) {
         setName(initialData.name || "");
-        setDescription(initialData.description || "");
+        setName_remote(initialData.name_remote || "");
         setChannel(initialData.channel || 1);
         setIsDrill(initialData.is_drill || false);
       } else {
         setName("");
-        setDescription("");
+        setName_remote("");
         setChannel(1);
         setIsDrill(false);
       }
@@ -34,7 +34,7 @@ export default function CreateAlarmModal({ isOpen, onClose, onCreate, initialDat
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!name.trim()) return;
-    onCreate({ name, description, channel, is_drill: isDrill });
+    onCreate({ name, name_remote, channel, is_drill: isDrill });
     onClose();
   };
 
@@ -68,13 +68,13 @@ export default function CreateAlarmModal({ isOpen, onClose, onCreate, initialDat
 
           {/* Описание */}
           <div>
-            <label className="block text-sm text-gray-400 mb-1">Описание</label>
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="w-full bg-[#0E1117] border border-gray-600 rounded-lg px-3 py-2 text-gray-100 h-24 resize-none
+            <label className="block text-sm text-gray-400 mb-1">Название с пульта</label>
+            <input
+              value={name_remote}
+              onChange={(e) => setName_remote(e.target.value)}
+              className="w-full bg-[#0E1117] border border-gray-600 rounded-lg px-3 py-2 text-gray-100
                          placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors duration-200"
-              placeholder="Краткое описание тревоги..."
+              placeholder="Например: fire"
             />
           </div>
 

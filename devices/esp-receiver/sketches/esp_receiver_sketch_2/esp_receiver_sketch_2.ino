@@ -4,18 +4,19 @@
 
 // ---- Dev/Prod ----
 #define DEV_PIN 3
+
 bool isDev = false;
-const char* ETH_HOSTNAME = "System-control-alerts-receiver_device_1";
+const char* ETH_HOSTNAME = "System-control-alerts-receiver_device_2";
 
 // Dev сеть
-IPAddress dev_IP(192,168,1,122);
+IPAddress dev_IP(192,168,1,123);
 IPAddress dev_gateway(192,168,1,1);
 IPAddress dev_subnet(255,255,255,0);
 IPAddress dev_dns(192,168,1,1);
 const char* dev_ws = "ws://192.168.1.99:2255";
 
 // Prod сеть
-IPAddress prod_IP(172,16,7,103);
+IPAddress prod_IP(172,16,7,104);
 IPAddress prod_gateway(172,16,4,2);
 IPAddress prod_subnet(255,255,248,0);
 IPAddress prod_dns(172,16,4,2);

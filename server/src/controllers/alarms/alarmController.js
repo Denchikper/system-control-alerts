@@ -14,8 +14,8 @@ exports.getAllAlarms = async (req, res) => {
 // Создать тревогу
 exports.createAlarm = async (req, res) => {
   try {
-    const { name, description, channel, is_drill } = req.body;
-    const alarm = await Alarm.create({ name, description, channel, is_drill, is_active: false });
+    const { name, name_remote, channel, is_drill } = req.body;
+    const alarm = await Alarm.create({ name, name_remote, channel, is_drill, is_active: false });
     res.status(201).json(alarm);
   } catch (err) {
     console.error('Ошибка создания тревоги:', err);
@@ -27,12 +27,12 @@ exports.createAlarm = async (req, res) => {
 exports.updateAlarm = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, channel, is_drill} = req.body;
+    const { name, name_remote, channel, is_drill} = req.body;
 
     const alarm = await Alarm.findByPk(id);
     if (!alarm) return res.status(404).json({ message: 'Тревога не найдена' });
 
-    await alarm.update({ name, description, channel, is_drill });
+    await alarm.update({ name, name_remote, channel, is_drill });
     res.json(alarm);
   } catch (err) {
     console.error('Ошибка обновления тревоги:', err);

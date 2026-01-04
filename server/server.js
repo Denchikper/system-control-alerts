@@ -10,6 +10,7 @@ const wsSingleton = require('./src/services/websocket/wsSingleton');
 const { testConnectionDB } = require('./src/test/testConnectionDB');
 const { syncDatabase } = require('./src/utils/databaseSync');
 const { resetDeviceStatus } = require('./src/services/websocket/resetDeviceStatus');
+const alertEngine = require('./src/services/Alerts/alertEngine');
 
 const SERVER_PORT = process.env.SERVER_PORT;
 const SERVER_IP = process.env.SERVER_IP;
@@ -22,6 +23,9 @@ const startServer = async () => {
     await syncDatabase();
     await resetDeviceStatus();
     
+    setInterval(() => {
+      alertEngine.check();
+    }, 10000);
 
     const server = app.listen(SERVER_PORT, SERVER_IP, () => {
       logger.server_success(`Сервер запущен на http://${SERVER_IP}:${SERVER_PORT}`);
