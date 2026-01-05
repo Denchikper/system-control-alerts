@@ -3,7 +3,7 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../database');
 
 const ScheduleScenario = sequelize.define('ScheduleScenario', {
-  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  id: { type: DataTypes.BIGINT, primaryKey: true, autoIncrement: true },
   schedule_id: { type: DataTypes.INTEGER, allowNull: false },
   day_id: { type: DataTypes.INTEGER, allowNull: false }
 }, {

@@ -1,4 +1,5 @@
 const sequelize = require('../../database');
+const Day = require('../../models/Day');
 const Schedule = require('../../models/Schedule');
 const ScheduleEvent = require('../../models/ScheduleEvent');
 const ScheduleScenario = require('../../models/ScheduleScenario');
@@ -63,9 +64,26 @@ exports.deleteSchedules = async (req, res) => {
 exports.createSchedule = async (req, res) => {
   try {
     const { name } = req.body;
+    if (!name || !name.trim()) {
+      return res.status(400).json({ error: 'Название расписания обязательно' });
+    }
     const schedule = await Schedule.create({ name });
-    res.json(schedule);
+    const days = await Day.findAll({
+      order: [['order_index', 'ASC']]
+    });
+
+    const scenarios = days.map(day => ({
+      schedule_id: schedule.id,
+      day_id: day.id
+    }));
+
+    await ScheduleScenario.bulkCreate(scenarios);
+    res.json({
+      schedule,
+      scenarios_created: scenarios.length
+    });
   } catch (err) {
+    console.error('createSchedule error:', err);
     res.status(500).json({ error: err.message });
   }
 };

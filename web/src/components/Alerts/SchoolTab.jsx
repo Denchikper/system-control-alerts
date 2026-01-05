@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import DaysList from "./schoolRings/DaysList";
 import StyledSelect from "../ui/StyledSelect";
 import { daysListGet } from "../../api/alerts/days";
-import { activateSchedule, deleteSchedules, schedulesActiveListGet, schedulesListGet } from "../../api/alerts/schedules";
+import { activateSchedule, deleteSchedules, schedulesActiveListGet, schedulesCreate, schedulesListGet } from "../../api/alerts/schedules";
 import { scenariosGet } from "../../api/alerts/scenarios";
 import EditScheduleMenu from "./schoolRings/Editable/EditScheduleMenu";
 import ConfirmDeleteScheduleModal from "./schoolRings/Editable/ConfirmDeleteScheduleModal";
+import CreateScheduleModal from "./schoolRings/CreateScheduleModal";
 
 export default function SchoolTab({ token,  logout, navigate}) {
+  const [isCreateScheduleModalOpen, setCreateScheduleModalOpen] = useState(false);
   const [selectedSchedule, setSelectedSchedule] = useState("");
   const [activeSchedule, setActiveSchedule] = useState([]);
   const [scenarioList, setScenarioList] = useState([]);
@@ -25,6 +27,19 @@ export default function SchoolTab({ token,  logout, navigate}) {
         name: scheduleToDelete.name 
       });
     }
+  }
+
+  const handleCreateSchedule = async (name) => {
+    const res = await schedulesCreate(token, name, logout, navigate);
+    if (res.ok) {
+      const resSchedules = await schedulesListGet(token, logout, navigate);
+      if (resSchedules.ok) {
+        const newSchedule =  resSchedules.data.find(s => s.name === name) || {}
+        setSchedules(resSchedules.data);
+        setSelectedSchedule(newSchedule.id);
+      }
+    }
+    console.log("Создать расписание:", name);
   }
 
   const handleConfirmDelete = async () => {
@@ -139,7 +154,7 @@ export default function SchoolTab({ token,  logout, navigate}) {
           <button onClick={() => setIsEditOpen(true)} className="px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-700  transition-colors duration-200 text-sm font-medium cursor-pointer">
             Управление расписанием
           </button>
-          <button onClick={() => setIsEditOpen(true)} className="px-3 py-2 rounded-lg bg-green-600 hover:bg-green-700  transition-colors duration-200 text-sm font-medium cursor-pointer">
+          <button onClick={() => setCreateScheduleModalOpen(true)} className="px-3 py-2 rounded-lg bg-green-600 hover:bg-green-700  transition-colors duration-200 text-sm font-medium cursor-pointer">
             Создать
           </button>
         </div>
@@ -172,7 +187,9 @@ export default function SchoolTab({ token,  logout, navigate}) {
         onConfirm={handleConfirmDelete}
         scheduleName={getSelectedSchedule()}
       />
-      
+      {isCreateScheduleModalOpen && (
+        <CreateScheduleModal onClose={() => setCreateScheduleModalOpen(false)} onCreate={(name) => handleCreateSchedule(name)}/>
+      )}
 
     </div>
   );

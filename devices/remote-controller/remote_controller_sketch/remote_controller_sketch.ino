@@ -46,7 +46,7 @@ const char* selectedAlarm = "fire";
 
 // ---------------- MENU ITEMS ----------------
 const char* mainMenu[] = { "AKTИBAЦИЯ", "ДEAKTИBAЦИЯ" };
-const char* alarmMenu[] = { "ПOЖAP", "BO3ДУX", "HAЗAД" };
+const char* alarmMenu[] = { "ПOЖAP", "BO3ДУX", "PAKETA", "XИMИЯ", "HAЗAД" };
 const char* typeMenu[] = { "TPEBOГA", "TPEНИPOBKA", "HAЗAД" };
 
 // -------------- CUSTOM ICONS -----------------
@@ -112,7 +112,7 @@ void normalizeMenuIndex() {
   int maxIndex = 0;
   switch(state){
     case MENU_MAIN: maxIndex = 1; break;
-    case MENU_ALARM: maxIndex = 2; break;
+    case MENU_ALARM: maxIndex = 4; break;
     case MENU_TYPE: maxIndex = 2; break;
     default: break;
   }
@@ -132,7 +132,7 @@ void showMenu() {
 
   switch(state){
     case MENU_MAIN: currentMenu = mainMenu; menuSize = 2; break;
-    case MENU_ALARM: currentMenu = alarmMenu; menuSize = 3; break;
+    case MENU_ALARM: currentMenu = alarmMenu; menuSize = 5; break;
     case MENU_TYPE: currentMenu = typeMenu; menuSize = 3; break;
     default: return;
   }
@@ -178,6 +178,21 @@ void selectMenu() {
         menuIndex = 0;
         viewStart = 0;
         showMenu();
+        
+      } else if(menuIndex == 2) {
+        selectedAlarm = "rocket";
+        state = MENU_TYPE;
+        menuIndex = 0;
+        viewStart = 0;
+        showMenu();
+        
+      } else if(menuIndex == 3) {
+        selectedAlarm = "chemical";
+        state = MENU_TYPE;
+        menuIndex = 0;
+        viewStart = 0;
+        showMenu();
+        
       } else { // NAZAD
         state = MENU_MAIN;
         menuIndex = 0;

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar.jsx";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import SchoolTab from "../components/Alerts/schoolTab.jsx";
+import SchoolTab from "../components/Alerts/SchoolTab.jsx";
 import PlannedTab from "../components/Alerts/PlannedTab.jsx";
 
 export default function PlannedAlertsPage() {

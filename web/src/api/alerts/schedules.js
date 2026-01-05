@@ -18,10 +18,10 @@ export async function deleteSchedules(token, id, logout, navigate) {
   return await fetchWithAuth(token, `/alerts/schedules/${id}`, { method: "DELETE" }, logout, navigate);
 }
 
-export async function schedulesCreate(token, schedulesData, logout, navigate) {
+export async function schedulesCreate(token, name, logout, navigate) {
   return await fetchWithAuth(token, "/alerts/schedules", {
     method: "POST",
-    body: JSON.stringify(schedulesData)
+    body: JSON.stringify({ name })
   }, logout, navigate);
 }
 
