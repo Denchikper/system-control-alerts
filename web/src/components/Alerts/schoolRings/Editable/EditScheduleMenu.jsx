@@ -2,7 +2,7 @@ import { use, useState } from "react";
 import EditableDaysGrid from "./EditableDaysGrid";
 import { Trash2, X } from "lucide-react";
 import AddLessonModal from "./AddLessonModal";
-import { deleteEventsByID, eventsCreate } from "../../../../api/alerts/events";
+import { deleteEventsByID, eventsCreate, eventUpdate } from "../../../../api/alerts/events";
 import { scenariosGet, scenariosGetByDay } from "../../../../api/alerts/scenarios";
 import { schedulesListGet, schedulesUpdate } from "../../../../api/alerts/schedules";
 
@@ -29,16 +29,52 @@ export default function EditScheduleMenu({
     const [eventsChoicen, setEventsChoicen] = useState([]);
     const [nameSchedule, setNameSchedule] = useState(schedulesActual.name);
 
+    const handleEventChange = (eventId, changes) => {
+      setScenarioList(prev =>
+        prev.map(scenario => ({
+          ...scenario,
+          ScheduleEvents: scenario.ScheduleEvents.map(event =>
+            event.id === eventId
+              ? { ...event, ...changes, isDirty: true } // помечаем как изменённое
+              : event
+          )
+        }))
+      );
+    };
+
     const handleSaveSchedule = async () => {
-        const res = await schedulesUpdate(token, schedulesActual.id, {name: nameSchedule}, logout, navigate);
-        if (res.ok) {
-            const resSchedules = await schedulesListGet(token, logout, navigate);
-            if (resSchedules.ok) setSchedules(resSchedules.data);
-            if (activeSchedule.id === schedulesActual.id) updateActiveSchedule();
-        } else {
-            console.error("Ошибка при сохранении расписания", res);
-        }
-        onClose();
+      const res = await schedulesUpdate(
+        token,
+        schedulesActual.id,
+        { name: nameSchedule },
+        logout,
+        navigate
+      );
+
+      if (res.ok) {
+        const resSchedules = await schedulesListGet(token, logout, navigate);
+        if (resSchedules.ok) setSchedules(resSchedules.data);
+        if (activeSchedule.id === schedulesActual.id) updateActiveSchedule();
+      } else {
+        console.error("Ошибка при сохранении расписания", res);
+      }
+
+  // Сохраняем изменённые события
+      const changedEvents = scenarioList
+        .flatMap(s => s.ScheduleEvents)
+        .filter(e => e.isDirty);
+
+      for (const event of changedEvents) {
+        await eventUpdate(
+          token,
+          event.id,
+          { start_time: event.start_time, end_time: event.end_time },
+          logout,
+          navigate
+        );
+      }
+
+      onClose();
     };
 
     const handleLessonSave = async (data) => {
@@ -55,7 +91,7 @@ export default function EditScheduleMenu({
             event_order = formData.event_order + 1
             scenario_id = formData.scenario_id
         }
-  // Создаем новый урок
+
         const res = await eventsCreate(token, scenario_id, event_order, data.startTime, data.endTime, logout, navigate);
         if (res.ok) {
             const updatedScenarioList = await scenariosGet(token, schedulesActual.id, logout, navigate);
@@ -116,7 +152,7 @@ export default function EditScheduleMenu({
         </div>
 
         {/* CONTENT */}
-        <div className="flex-1 overflow-x-auto overflow-y-hidden flex custom-scrollbar-3">
+        <div className="flex-1 overflow-x-auto pr flex custom-scrollbar-3 custom-scrollbar">
           <EditableDaysGrid
             daysList={daysList}
             scenarioList={scenarioList}
@@ -124,6 +160,7 @@ export default function EditScheduleMenu({
             setLessonModalOpen={setLessonModalOpen}
             setDayChoicen={setDayChoicen}
             handleDeleteLesson={handleDeleteLesson}
+            onChange={handleEventChange}
           />
         </div>
 
@@ -142,9 +179,9 @@ export default function EditScheduleMenu({
           
         </div>
       </div>
-    {isLessonModalOpen && (
+      {isLessonModalOpen && (
         <AddLessonModal onClose={() => setLessonModalOpen(false)} onSave={(data) => handleLessonSave(data)}/>
-    )}
+      )}
     </div>
   );
 }

@@ -23,6 +23,33 @@ exports.deleteEventsByID = async (req, res) => {
   }
 };
 
+exports.updateEvent = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { start_time, end_time, ...otherFields } = req.body;
+
+    const event = await ScheduleEvent.findByPk(id);
+    if (!event) {
+      return res.status(404).json({ message: 'Событие не найдено' });
+    }
+
+    if (start_time !== undefined) event.start_time = start_time;
+    if (end_time !== undefined) event.end_time = end_time;
+
+    for (const key in otherFields) {
+      if (event[key] !== undefined) event[key] = otherFields[key];
+    }
+
+    await event.save();
+
+    res.status(200).json({ event });
+
+  } catch (err) {
+    console.error('updateEvent error:', err);
+    res.status(500).json({ error: err.message });
+  }
+};
+
 exports.getEventsByScenario = async (req, res) => {
   try {
     const { scenario_id } = req.params;

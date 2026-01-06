@@ -1,7 +1,7 @@
 import { Trash2 } from "lucide-react";
-import { utcToLocalTime } from "../../../../utils/formatTime";
+import { localTimeToUTC, utcToLocalTime } from "../../../../utils/formatTime";
 
-export default function EditableEventRow({ event, handleDeleteLesson }) {
+export default function EditableEventRow({ event, handleDeleteLesson, onChange }) {
 
   return (
     <div className="bg-[#1F242D] rounded-lg p-3 flex gap-3 custom-scrollbar">
@@ -21,7 +21,9 @@ export default function EditableEventRow({ event, handleDeleteLesson }) {
             С:
             <input
               type="time"
-              defaultValue={utcToLocalTime(event.start_time)}
+              value={utcToLocalTime(event.start_time)}
+              onChange={(e) => onChange(event.id, {start_time: localTimeToUTC(e.target.value)})
+            }
               className="mt-1 ml-5 bg-[#0D1117] border border-gray-700 rounded px-2 py-1 text-sm"
             />
           </label>
@@ -30,7 +32,9 @@ export default function EditableEventRow({ event, handleDeleteLesson }) {
             До:
             <input
               type="time"
-              defaultValue={utcToLocalTime(event.end_time)}
+              value={utcToLocalTime(event.end_time)}
+              onChange={(e) => onChange(event.id, { end_time: localTimeToUTC(e.target.value) })
+            }
               className="mt-1 ml-3 bg-[#0D1117] border border-gray-700 rounded px-2 py-1 text-sm"
             />
           </label>

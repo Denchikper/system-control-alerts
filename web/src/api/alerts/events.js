@@ -8,6 +8,13 @@ export async function deleteEventsByID(token, id, logout, navigate) {
   return await fetchWithAuth(token, `/alerts/events/${id}`, { method: "DELETE" }, logout, navigate);
 }
 
+export async function eventUpdate(token, id, data, logout, navigate) {
+  return fetchWithAuth(token, `/alerts/events/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(data)
+  }, logout, navigate);
+}
+
 export async function eventsCreate(token, scenario_id, event_order, start_time, end_time, logout, navigate) {
   const scenariosData = {scenario_id, event_order, start_time, end_time}
   return await fetchWithAuth(token, "/alerts/events", {

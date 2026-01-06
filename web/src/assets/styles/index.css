@@ -79,7 +79,7 @@ img {
 }
 
 .custom-scrollbar-2::-webkit-scrollbar-track {
-  background: #151a22;
+  background: #0D1117;
 }
 
 .custom-scrollbar-3::-webkit-scrollbar {
@@ -97,6 +97,5 @@ img {
 }
 
 .custom-scrollbar-3::-webkit-scrollbar-track {
-  background: #151a22;
-  
+  background: #0D1117;
 }

@@ -1,9 +1,10 @@
 # 🔔 Система управления звуковыми оповещениями | Сервер
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue)]()
+[![Version](https://img.shields.io/badge/version-1.2.0-blue)]()
 [![License](https://img.shields.io/badge/license-MIT-green)]()
 
-
+## 📊 Схема базы данных
+<img src="../docs/db_scheme.png" alt="Scheme" class="rounde">
 
 ## 📚 Используемые библиотеки
 

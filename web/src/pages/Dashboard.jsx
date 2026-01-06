@@ -18,7 +18,7 @@ export default function Dashboard() {
 
 
   return (
-    <div className="flex flex-col h-screen bg-[#0E1117] text-gray-200 overscroll-y-none touch-none">
+    <div className="flex flex-col h-screen bg-[#0E1117] text-gray-200 overscroll-y-none">
       <Navbar />
 
       <div className="flex flex-1 px-6 py-4 space-x-6">

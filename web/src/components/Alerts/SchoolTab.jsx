@@ -19,7 +19,7 @@ export default function SchoolTab({ token,  logout, navigate}) {
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, name: "" });
   const [loading, setLoading] = useState(false);
 
-  function handleDeleteClick() {
+  const handleDeleteClick = () => {
     const scheduleToDelete = schedules.find(s => s.id === selectedSchedule);
     if (scheduleToDelete) {
       setDeleteModal({ 
@@ -39,7 +39,6 @@ export default function SchoolTab({ token,  logout, navigate}) {
         setSelectedSchedule(newSchedule.id);
       }
     }
-    console.log("Создать расписание:", name);
   }
 
   const handleConfirmDelete = async () => {
@@ -56,7 +55,7 @@ export default function SchoolTab({ token,  logout, navigate}) {
             setActiveSchedule({})
             await updateActiveSchedule();
           } else {
-            setSelectedSchedule("");
+            setSelectedSchedule(activeSchedule.id);
         }
        }
       }
@@ -84,7 +83,7 @@ export default function SchoolTab({ token,  logout, navigate}) {
 
   useEffect(() => {
     setLoading(true);
-    async function loadData() {
+    const loadData = async () => {
         if (!token) return;
 
         updateActiveSchedule();
@@ -124,7 +123,7 @@ export default function SchoolTab({ token,  logout, navigate}) {
         <div className="flex items-center gap-4">
           <div className="w-60">
             <StyledSelect
-              style="appearance-none bg-[#151921] text-gray-200 border border-gray-700 rounded-lg py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+              style="appearance-none max-w-60 bg-[#151921] text-gray-200 border border-gray-700 rounded-lg py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
               options={schedules.map((s) => ({ value: s.id, label: s.name }))}
               value={selectedSchedule}
               onChange={(e) => setSelectedSchedule(Number(e.target.value))}
@@ -139,16 +138,18 @@ export default function SchoolTab({ token,  logout, navigate}) {
           </button>
         </div>
 
-        <div className="flex items-center gap-4">
-          <span className="inline-flex items-center px-3 py-1 bg-gray-800 text-white text-sm font-medium rounded-full shadow-sm">
+        <div className="flex items-center gap-4 ">
+          <span className="inline-flex items-center justify-center w-[280px] px-3 py-1 bg-gray-800 text-white text-sm font-medium rounded-full shadow-sm">
             <svg
-              className="w-3 h-3 mr-2 text-green-400"
+              className="w-3 h-3 mr-2 shrink-0 text-green-400"
               fill="currentColor"
               viewBox="0 0 8 8"
             >
               <circle cx="4" cy="4" r="4" />
             </svg>
-            Активное расписание: {activeSchedule.name || "не выбрано"}
+              <span className="truncate whitespace-nowrap ">
+                Активное расписание: {activeSchedule.name || "не выбрано"}
+              </span>
           </span>
 
           <button onClick={() => setIsEditOpen(true)} className="px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-700  transition-colors duration-200 text-sm font-medium cursor-pointer">

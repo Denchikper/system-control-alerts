@@ -1,6 +1,6 @@
 import EditableDayColumn from "./EditableDayColumn";
 
-export default function EditableDaysGrid({ daysList, scenarioList, setLessonModalOpen, setDayChoicen, setEventsChoicen, handleDeleteLesson }) {
+export default function EditableDaysGrid({ daysList, scenarioList, setLessonModalOpen, setDayChoicen, setEventsChoicen, handleDeleteLesson, onChange }) {
   const eventsByDay = {};
 
   scenarioList.forEach(s => {
@@ -14,11 +14,12 @@ export default function EditableDaysGrid({ daysList, scenarioList, setLessonModa
   });
 
   return (
-    <div className="grid grid-flow-col auto-cols-[220px] gap-5 custom-scrollbar-2">
+    <div className="grid grid-flow-col auto-cols-[220px] gap-5 custom-scrollbar-2 pb-3">
       {sortedDays.map(day => (
         <EditableDayColumn
           key={day.id}
           day={day}
+          onChange={onChange}
           handleDeleteLesson={handleDeleteLesson}
           setEventsChoicen={setEventsChoicen}
           setLessonModalOpen={setLessonModalOpen}

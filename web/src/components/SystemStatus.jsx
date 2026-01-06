@@ -21,7 +21,7 @@
     }, [token, logout, navigate]);
 
     return (
-      <div className="bg-[#151A22] border border-gray-700 p-6 rounded-2xl shadow-lg w-full max-w-sm text-gray-200">
+      <div className="bg-[#151A22] border border-gray-700 p-6 rounded-2xl shadow-lg w-full max-w-sm text-gray-200 max-h-110">
         <h2 className="text-xl font-semibold text-center flex items-center justify-center gap-2">Состояние системы</h2>
 
         <p className={`text-center text-sm font-medium mb-5 ${

@@ -34,8 +34,8 @@ async checkSchedule(now) {
   if (!activeSchedules || activeSchedules.length === 0) return;
 
   // !!!!!!!!!!!! НЕ ЗАБЫТЬ УБРАТЬ ЗАГЛУШКУ !!!!!!!!!!!!
-//   const jsDay = now.getDay(); // 0 = Sunday
-  const jsDay = 1;
+  const jsDay = now.getDay(); // 0 = Sunday
+  // const jsDay = 4;
   const orderIndex = jsDay === 0 ? 7 : jsDay;
 
   // Приводим текущее время к минутам локального времени

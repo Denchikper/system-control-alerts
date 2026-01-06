@@ -10,7 +10,6 @@ export default function ChangeDutyPanel({ token, logout, navigate }) {
     setLoading(true);
     try {
       const res = await changeDutyPass(token, logout, navigate);
-
       if (res?.ok) {
         setResult(res.data);
         setIsModalOpen(true);
@@ -25,8 +24,25 @@ export default function ChangeDutyPanel({ token, logout, navigate }) {
   return (
     <>
       {/* PANEL */}
-      <div className="w-[24%] min-w-[260px] h-[145px] bg-[#151A22] border border-gray-700 rounded-2xl p-6 shadow-xl flex flex-col justify-between transition-all duration-300">
-        <h2 className="text-lg font-semibold text-gray-100 text-center">
+      <div
+        className="
+          w-full
+          max-w-sm
+          sm:max-w-md
+          lg:max-w-sm
+          min-h-35
+          max-h-35
+          bg-[#151A22]
+          border border-gray-700
+          rounded-2xl
+          p-5 sm:p-6
+          shadow-xl
+          flex flex-col
+          gap-5
+          transition-all
+        "
+      >
+        <h2 className="text-base sm:text-lg font-semibold text-gray-100 text-center">
           Смена дежурного администратора
         </h2>
 
@@ -35,10 +51,12 @@ export default function ChangeDutyPanel({ token, logout, navigate }) {
           disabled={loading}
           className="
             w-full py-3
-            bg-linear-to-r from-blue-600 to-blue-500 
-          hover:from-blue-700 hover:to-blue-600
-            rounded-xl text-white font-semibold text-sm
+            rounded-xl
+            bg-linear-to-r from-blue-600 to-blue-500
+            hover:from-blue-700 hover:to-blue-600
+            text-white font-semibold text-sm
             transition-all duration-300
+            disabled:opacity-60 disabled:cursor-not-allowed
             hover:scale-[1.02]
             shadow-[0_0_18px_rgba(59,130,246,0.45)]
           "
@@ -49,9 +67,20 @@ export default function ChangeDutyPanel({ token, logout, navigate }) {
 
       {/* MODAL */}
       {isModalOpen && result && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="w-[380px] bg-[#151A22] border border-gray-700 rounded-2xl p-6 shadow-2xl">
-            <h3 className="text-lg font-semibold text-gray-100 text-center mb-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-3">
+          <div
+            className="
+              w-full
+              max-w-sm
+              bg-[#151A22]
+              border border-gray-700
+              rounded-2xl
+              p-5 sm:p-6
+              shadow-2xl
+              animate-modalEnter
+            "
+          >
+            <h3 className="text-base sm:text-lg font-semibold text-gray-100 text-center mb-4">
               Готово
             </h3>
 
@@ -63,7 +92,7 @@ export default function ChangeDutyPanel({ token, logout, navigate }) {
               <p className="text-xs text-gray-400 mb-1">
                 Новый код доступа
               </p>
-              <p className="text-2xl font-mono font-bold text-blue-400 tracking-widest">
+              <p className="text-xl sm:text-2xl font-mono font-bold text-blue-400 tracking-widest break-all">
                 {result.code}
               </p>
             </div>
