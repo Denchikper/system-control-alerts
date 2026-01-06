@@ -110,7 +110,7 @@ export default function DevicesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0B0E13] text-gray-100">
+    <div className="min-h-screen bg-[#0B0E13] text-gray-100 ">
       <Navbar />
 
       <div className="max-w-5xl mx-auto mt-8 px-6 pb-10">
@@ -135,7 +135,7 @@ export default function DevicesPage() {
 
         {error && <p className="text-red-400 mb-4">{error}</p>}
 
-        <div className="space-y-4">
+        <div className="space-y-4 animate-modalEnter">
           {devices.length === 0 ? (
             <p className="text-gray-400 text-center py-6">Нет зарегистрированных устройств</p>
           ) : (

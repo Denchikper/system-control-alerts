@@ -138,7 +138,7 @@ export default function AlarmsPage() {
 
         {error && <p className="text-red-400 mb-4">{error}</p>}
 
-        <div className="space-y-4">
+        <div className="space-y-4 animate-modalEnter">
           {alarms.length === 0 ? (
             <p className="text-gray-400 text-center py-6">Нет доступных тревог</p>
           ) : (

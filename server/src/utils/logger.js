@@ -16,9 +16,12 @@ const customLevels = {
     ws_error: 9,
     ws_warn: 10,
     ws_success: 11,
-    error: 12,
-    warn: 13,
-    info: 14,
+    alertengine_error: 12, 
+    alertengine_warn: 13,
+    alertengine_success: 14,
+    error: 15,
+    warn: 16,
+    info: 17,
   },
 };
 
@@ -73,8 +76,6 @@ const customFormat = format.combine(
 
 const logger = createLogger({
   levels: customLevels.levels,
-  // УБРАТЬ эту строку ↓
-  // level: 'remote_error',
   format: customFormat,
   transports: [
     new transports.File({ 
@@ -154,6 +155,18 @@ if (process.env.NODE_ENV !== 'p') {
             prefix = chalk.bgHex('#5c1aeb').black(' RM ');
             formatted = `${prefix} - ${chalk.bgGreen.black(' SUCCESS ')} - ${formattedMessage}`;
             break;
+          case 'alertengine_error':
+            prefix = chalk.bgHex('#05ede2').black(' AE ');
+            formatted = `${prefix} - ${chalk.bgRed.white(' ERROR ')} - ${formattedMessage}`;
+            break;
+          case 'alertengine_warn':
+            prefix = chalk.bgHex('#05ede2').black(' AE ');
+            formatted = `${prefix} - ${chalk.bgYellow.black(' WARN ')} - ${formattedMessage}`;
+            break;
+          case 'alertengine_success':
+            prefix = chalk.bgHex('#05ede2').black(' AE ');
+            formatted = `${prefix} - ${chalk.bgGreen.black(' SUCCESS ')} - ${formattedMessage}`;
+            break;
           default:
             prefix = chalk.bgGray.black(' LOG ');
             formatted = `${prefix} - ${chalk.white(' MESSAGE ')} - ${formattedMessage}`;
@@ -183,6 +196,9 @@ logger.server_error = (msg, meta) => logger.log({ level: 'server_error', message
 logger.remote_success = (msg, meta) => logger.log({ level: 'remote_success', message: msg, ...meta });
 logger.remote_warn = (msg, meta) => logger.log({ level: 'remote_warn', message: msg, ...meta });
 logger.remote_error = (msg, meta) => logger.log({ level: 'remote_error', message: msg, ...meta });
+logger.alertengine_success = (msg, meta) => logger.log({ level: 'alertengine_success', message: msg, ...meta });
+logger.alertengine_warn = (msg, meta) => logger.log({ level: 'alertengine_warn', message: msg, ...meta });
+logger.alertengine_error = (msg, meta) => logger.log({ level: 'alertengine_error', message: msg, ...meta });
 
 // Удобные методы для объектов
 logger.ws_successObj = (obj, description = '') => {

@@ -17,6 +17,12 @@ router.use('/server/server-status', require('./protected/server/serverStatus.rou
 
 router.use('/alarm', require('./protected/alarms/alarmAll.route'));
 router.use('/device', require('./protected/devices/devicesAll.route'));
+
+router.use('/alerts/days', require('./protected/alerts/daysRoutes.route'));
+router.use('/alerts/schedules', require('./protected/alerts/scheduleRoutes.route'));
+router.use('/alerts/scenarios', require('./protected/alerts/scenarioRoutes.route'));
+router.use('/alerts/events', require('./protected/alerts/eventRoutes.route'));
+router.use('/alerts/planned-alerts', require('./protected/alerts/plannedAlertRoutes.route'));
  
 
 module.exports = router;

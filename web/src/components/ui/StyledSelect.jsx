@@ -1,11 +1,13 @@
 import React from "react";
 
-export default function StyledSelect({ options, value, onChange, placeholder }) {
+export default function StyledSelect({ style, options, value, onChange, placeholder }) {
+  // базовый класс
+  const baseClass = "appearance-none w-full bg-[#151921] text-gray-200 border border-gray-700 rounded-lg py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200";
+
   return (
     <div className="relative inline-block w-full">
       <select
-        className="appearance-none w-full bg-[#151921] text-gray-200 border border-gray-700 rounded-lg py-2 pl-10 pr-4 
-                   focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+        className={style ? style : baseClass} // если есть style — используем его, иначе базовый
         value={value}
         onChange={onChange}
       >

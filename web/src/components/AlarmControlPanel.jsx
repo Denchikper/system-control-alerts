@@ -4,7 +4,7 @@ import ErrorModal from "./ErrorModal";
 import { activateAlarm, deactivateAlarm } from "../api/alarms/alarms";
 import { getAlarms } from "../api/alarms/alarms";
 
-export default function AlarmControlPanel({ token, logout, navigate }) {
+export default function AlarmControlPanel({ token, logout, navigate, setActiveAlarm }) {
 
   useEffect (() => {
     const loadAlarms = async () => {
@@ -40,6 +40,8 @@ export default function AlarmControlPanel({ token, logout, navigate }) {
 
       if (!res.ok) {
         setErrorModal({ open: true, message: res.data.errorMessage });
+      } else {
+        setActiveAlarm(confirmModal.alarm.name)
       }
 
       closeConfirm();
@@ -63,8 +65,10 @@ export default function AlarmControlPanel({ token, logout, navigate }) {
 
       if (!res.ok) {
         setErrorModal({ open: true, message: res.data.errorMessage });
+      } else {
+        setActiveAlarm("Нет активных тревог")
       }
-
+      
       closeConfirm();
     } catch (err) {
       console.error("Ошибка при деактивации всех тревог:", err);
@@ -83,7 +87,7 @@ export default function AlarmControlPanel({ token, logout, navigate }) {
   return (
     <>
       <div
-        className="w-[41%] bg-[#151A22] border border-gray-700 rounded-2xl p-6 shadow-lg
+        className="min-w-40 bg-[#151A22] border border-gray-700 rounded-2xl p-6 shadow-lg
                    transition-all duration-300 flex flex-col"
         style={{ height: alarms.length <= 8 ? `${160 + Math.ceil(alarms.length / 2) * 70}px` : "480px" }}
       >
@@ -102,7 +106,7 @@ export default function AlarmControlPanel({ token, logout, navigate }) {
       <button
         key={alarm.id}
         onClick={() => openConfirm(alarm)}
-        className="px-3 py-3 rounded-lg border text-left font-medium 
+        className="px-4 py-3 rounded-lg border text-left font-medium 
                    transition-all duration-300 shadow-md relative text-sm
                    bg-[#1A1F29] border-gray-700 hover:bg-[#222832] text-gray-100 hover:scale-[1.004]"
       >

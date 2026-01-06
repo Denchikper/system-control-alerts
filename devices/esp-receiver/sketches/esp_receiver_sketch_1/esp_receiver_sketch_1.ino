@@ -3,12 +3,12 @@
 #include "nrfHandler.h"
 
 // ---- Dev/Prod ----
-#define DEV_PIN 36
+#define DEV_PIN 3
 bool isDev = false;
 const char* ETH_HOSTNAME = "System-control-alerts-receiver_device_1";
 
 // Dev сеть
-IPAddress dev_IP(192,168,1,123);
+IPAddress dev_IP(192,168,1,122);
 IPAddress dev_gateway(192,168,1,1);
 IPAddress dev_subnet(255,255,255,0);
 IPAddress dev_dns(192,168,1,1);
@@ -58,21 +58,28 @@ void onNRFReceive(const char* data, size_t len) {
 void setup() {
     delay(1000);
 
+    // 🔹 DEV / PROD переключатель
     pinMode(DEV_PIN, INPUT_PULLUP);
+    delay(10); // защита от дребезга
     isDev = (digitalRead(DEV_PIN) == LOW);
 
     ETH.begin();
     ETH.setHostname(ETH_HOSTNAME);
 
-    if(isDev)
+    if (isDev) {
+        ETH.config(dev_IP, dev_gateway, dev_subnet, dev_dns, dev_dns);
+    } else {
         ETH.config(prod_IP, prod_gateway, prod_subnet, prod_dns, prod_dns);
+    }
+
+    while (!ETH.linkUp()) {
+        delay(100);
+    }
+
+    if (isDev)
+        connectToServer(dev_ws);
     else
-        ETH.config(prod_IP, prod_gateway, prod_subnet, prod_dns, prod_dns);
-
-    while(!ETH.linkUp()) delay(100);
-
-    if(isDev) connectToServer(prod_ws);
-    else connectToServer(prod_ws);
+        connectToServer(prod_ws);
 
     initNRF(NRF_CE, NRF_CSN, NRF_SCK, NRF_MOSI, NRF_MISO);
 }
