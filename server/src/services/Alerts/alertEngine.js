@@ -31,25 +31,37 @@ class AlertEngine {
   // Проверка всех активных расписаний
 async checkSchedule(now) {
   const activeSchedules = await Schedule.findAll({ where: { is_active: true } });
+
   if (!activeSchedules || activeSchedules.length === 0) return;
 
   // !!!!!!!!!!!! НЕ ЗАБЫТЬ УБРАТЬ ЗАГЛУШКУ !!!!!!!!!!!!
   const jsDay = now.getDay(); // 0 = Sunday
   // const jsDay = 4;
-  const orderIndex = jsDay === 0 ? 7 : jsDay;
+  console.log(`DAY: ${jsDay}`)
+  let orderIndex
 
+  if (jsDay === 0) {
+    orderIndex = 7
+  } else {
+    orderIndex = jsDay
+  }
+  console.log(`DAY order: ${orderIndex}`)
   // Приводим текущее время к минутам локального времени
   const nowLocal = new Date(now.getTime() + now.getTimezoneOffset() * 60000); 
   const nowMinutes = nowLocal.getHours() * 60 + nowLocal.getMinutes();
 
   for (const schedule of activeSchedules) {
     const day = await Day.findOne({ where: { order_index: orderIndex } });
+
     if (!day) continue;
 
     const scenario = await ScheduleScenario.findOne({
       where: { schedule_id: schedule.id, day_id: day.id },
       include: [{ model: ScheduleEvent, as: 'ScheduleEvents' }]
     });
+
+    console.log(`Scenario: ${scenario}`)
+
     if (!scenario || !scenario.ScheduleEvents || scenario.ScheduleEvents.length === 0) continue;
 
     for (const ev of scenario.ScheduleEvents) {
@@ -65,7 +77,6 @@ async checkSchedule(now) {
         controlRing();
       }
 
-      // Включение звонка в конце события
       if (nowMinutes === endMinutes && !this.triggeredEnd.has(ev.id)) {
         this.triggeredEnd.add(ev.id);
         controlRing();
