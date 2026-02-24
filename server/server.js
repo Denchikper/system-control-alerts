@@ -2,7 +2,7 @@ const dotenv = require('dotenv');
 const path = require('path');
 
 const env = process.env.NODE_ENV || 'development';
-dotenv.config({ path: path.resolve(__dirname, `.env.${env}`) });
+dotenv.config({ path: path.resolve(__dirname, `.env.${env}`), quite: true});
 
 const app = require('./src/app');
 const logger = require('./src/utils/logger');
@@ -19,7 +19,7 @@ require('./src/models');
 
 const startServer = async () => {
   try {
-    await testConnectionDB(); // проверка соединения с БД
+    await testConnectionDB();
     await syncDatabase();
     await resetDeviceStatus();
     
