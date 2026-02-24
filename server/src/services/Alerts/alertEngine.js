@@ -32,8 +32,8 @@ async checkSchedule(now) {
   if (!activeSchedules || activeSchedules.length === 0) return;
 
   // !!!!!!!!!!!! НЕ ЗАБЫТЬ УБРАТЬ ЗАГЛУШКУ !!!!!!!!!!!!
-  // const orderIndex = now.getDay(); // 0 = Sunday
-  const orderIndex = 0;
+  const orderIndex = now.getDay();
+  // const orderIndex = 0;
 
   const nowLocal = new Date(now.getTime() + now.getTimezoneOffset() * 60000); 
   const nowMinutes = nowLocal.getHours() * 60 + nowLocal.getMinutes();
