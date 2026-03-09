@@ -52,7 +52,6 @@ async checkSchedule(now) {
     });
 
     if (!scenario || !scenario.ScheduleEvents || scenario.ScheduleEvents.length === 0) {
-      console.log(`Сценарий для ${day.name} не найден!`);
       return;
     };
 
