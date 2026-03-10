@@ -1,7 +1,7 @@
 // src/pages/AlarmsPage.jsx
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import AlarmItem from "../components/alarms/AlarmItem";
+import AlarmItem from "../components/Alarms/AlarmItem";
 import CreateAlarmModal from "../components/Alarms/CreateAlarmModal";
 import ConfirmDeleteModal from "../components/Alarms/ConfirmDeleteModal";
 
