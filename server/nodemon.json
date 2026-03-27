@@ -1,6 +1,6 @@
 {
-  "watch": ["src", "websocket", "server.js"],
+  "watch": ["src", "server.js"],
   "ignore": ["node_modules", "logs", "*.log"],
-  "ext": "js,json,html",
+  "ext": "js,json",
   "exec": "node server.js"
 }

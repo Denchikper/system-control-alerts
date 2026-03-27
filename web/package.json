@@ -4,12 +4,9 @@
   "version": "1.2.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --mode development --host",
+    "dev": "vite --host 0.0.0.0 --port 3000",
     "build": "vite build",
-    "build:dev": "vite build --mode development",
-    "build:prod": "vite build --mode production",
-    "preview": "vite preview",
-    "preview:prod": "vite preview --mode production"
+    "preview": "vite preview --host 0.0.0.0 --port 3000"
   },
   "dependencies": {
     "jwt-decode": "^4.0.0",

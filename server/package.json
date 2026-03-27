@@ -16,9 +16,7 @@
   "main": "server.js",
   "scripts": {
     "start": "cross-env NODE_ENV=production node server.js",
-    "preview": "cross-env NODE_ENV=production nodemon server.js",
-    "dev": "cross-env NODE_ENV=development nodemon server.js",
-    "dev:debug": "cross-env NODE_ENV=development nodemon --inspect server.js"
+    "dev": "cross-env NODE_ENV=development nodemon server.js"
   },
   "dependencies": {
     "@sequelize/postgres": "^7.0.0-alpha.46",

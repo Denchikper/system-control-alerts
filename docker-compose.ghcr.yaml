@@ -1,0 +1,30 @@
+services:
+  server:
+    image: ghcr.io/denchikper/system-control-alerts-server:latest
+    container_name: sca-server
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      SERVER_IP: 0.0.0.0
+      SERVER_PORT: ${SERVER_PORT:-2255}
+      DATABASE_HOST: ${DATABASE_HOST:-host.docker.internal}
+      DATABASE_PORT: ${DATABASE_PORT:-5432}
+      DATABASE_NAME: ${DATABASE_NAME:-system_control_alerts}
+      DATABASE_USER: ${DATABASE_USER:-postgres}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-postgres}
+      JWT_SECRET: ${JWT_SECRET:-change-me}
+      WS_HEARTBEAT_DEVICES_INTERVAL: ${WS_HEARTBEAT_DEVICES_INTERVAL:-30000}
+    ports:
+      - "${SERVER_PORT:-2255}:2255"
+
+  web:
+    image: ghcr.io/denchikper/system-control-alerts-web:latest
+    container_name: sca-web
+    restart: unless-stopped
+    depends_on:
+      - server
+    environment:
+      PORT: 3000
+      API_TARGET: http://server:2255
+    ports:
+      - "${WEB_PORT:-3000}:3000"

@@ -1,131 +1,244 @@
-# 🔔 Система управления звуковыми оповещениями 
+# Система управления звуковыми оповещениями
 
-[![Version](https://img.shields.io/badge/version-1.2.0-blue)]()
-[![License](https://img.shields.io/badge/license-MIT-green)]()
+## Структура
 
-## 📋 Предварительные требования
-Перед началом убедитесь, что на вашей системе установлено:
-
-* Node.js (версия 18 или выше) — [Скачать](https://nodejs.org/en/download)
-* npm (обычно поставляется с Node.js) или yarn
-* cross-env - установите его с помощью команды **npm install cross-env -g** или **yarn global add cross-env**
-
-## 📁 Структура проекта
 ```bash
 system-conrtol-alerts/
-├── devices/
-│   ├── esp-receiver/         # Файлы для разработанного приемника
-│   ├── esp-rele/             # Файлы для разработанного устройства-реле  
-│   ├── remote-controller/    # Файлы для разработанного устройства-пульта
-│   ├── test_sketches/        # Тестовые скетчи
-│   └── README.md             # Описание устройств и приемника
-├── docs/                     # Документация необходимая для разработки проекта
-├── sounds/                   # Аудиофайлы
-├── server/                   # Backend (Node.js)
-│   ├── src/                  # Исходный код сервера
-│   ├── logs/                 # Логи сервера (для отладки)
-│   ├── node_modules/         # Зависимости сервера
-│   ├── env.development       # Переменные окружения для разработки
-│   ├── env.example           # Пример переменных окружения
-│   ├── env.production        # Переменные окружения для продакшена
-│   ├── .gitignore            # Git-игнор для сервера
-│   ├── ecosystem.config.js   # Конфиг PM2 (для деплоя)
-│   ├── nodemon.json          # Конфиг Nodemon
-│   ├── package.json          # Зависимости и скрипты сервера
-│   ├── package-lock.json     # Лок-файл зависимостей сервера
-│   ├── README.md             # Документация сервера
-│   └── server.js             # Точка входа сервера
-├── web/                      # Frontend (Vite + Tailwind CSS)
-│   ├── src/                  # Исходный код фронтенда
-│   ├── public/               # Статические файлы фронтенда
-│   ├── node_modules/         # Зависимости фронтенда
-│   ├── env.development       # Переменные окружения фронтенда (dev)
-│   ├── env.example           # Пример переменных фронтенда
-│   ├── env.production        # Переменные окружения фронтенда (prod)
-│   ├── .gitignore            # Git-игнор для фронтенда
-│   ├── eslint.config.js      # Конфиг ESLint
-│   ├── index.html            # Главный HTML-файл
-│   ├── package.json          # Зависимости и скрипты фронтенда
-│   ├── package-lock.json     # Лок-файл зависимостей фронтенда
-│   ├── README.md             # Документация фронтенда
-│   ├── postcss.config.js     # Конфиг PostCSS
-│   ├── tailwind.config.js    # Конфиг Tailwind CSS
-│   └── vite.config.js        # Конфиг Vite
-├── .gitignore                # Общий gitignore для всего проекта
-├── LICENSE                   # Лицензия проекта
-├── package.json              # Корневой package.json
-├── package-lock.json         # Корневой лок-файл
-└── README.md                 # Общая документация проекта
+├── server/                    # Backend (Node.js + Express + WS)
+├── web/                       # Frontend (React + Vite)
+├── devices/                   # Прошивки и схемы устройств
+├── docs/                      # Документация
+├── docker-compose.yaml        # Обычный Docker запуск
+├── docker-compose.hostnet.yaml# Linux host network запуск
+├── .env.example               # Пример переменных окружения
+└── README.md
 ```
 
-## 📶 Запуск проекта
+## Переменные окружения
 
-### 1. Клонирование репозитория
+Создайте корневой `.env` на основе `.env.example`:
+
 ```bash
-git clone https://github.com/Denchikper/system-control-alerts.git
-cd system-control-alerts
-```
-### 2. Сервер
-#### 2.1. Установка зависимостей
-```bash
-cd server
-npm install
-# или
-cd server 
-yarn install
+cp .env.example .env
 ```
 
-#### 2.2. Настройка переменных окружения
-Создайте файл .env в корне проекта на основе примера:
-```bash
-cp .env.example .env.development
-cp .env.example .env.production
-```
-Отредактируйте __.env.development__ и __.env.development__ файлы, указав необходимые ключи (API, база данных и т.д.). 
+Основные параметры:
 
-#### 2.3. Запуск в режиме разработки
-```bash
-npm run dev
-# или
-yarn dev
-```
-#### 2.4. Запуск в режиме продакшна
-```bash
-npm run start
-# или
-yarn start
-```
-### 3. Веб-приложение
-#### 3.1. Установка зависимостей
-```bash
-cd web
-npm install
-# или
-cd web
-yarn install
+```env
+DATABASE_HOST=host.docker.internal
+DATABASE_NAME=system_control_alerts
+DATABASE_USER=postgres
+DATABASE_PASSWORD=postgres
+DATABASE_PORT=5432
+
+SERVER_PORT=2255
+WEB_PORT=3000
+VITE_API_URL=/api
+
+JWT_SECRET=change-me
+WS_HEARTBEAT_DEVICES_INTERVAL=30000
 ```
 
-#### 3.2. Настройка переменных окружения веб-приложения
-Создайте файл .env в корне проекта на основе примера:
-```bash
-cp .env.example .env.development
-cp .env.example .env.production
-```
-Отредактируйте __.env.development__ и __.env.development__ файлы, указав необходимые ключи (API, база данных и т.д.). 
+## Docker
 
-#### 3.3. Запуск в режиме разработки
+### Обычный запуск
+
+Запуск сборки и контейнеров:
+
 ```bash
-npm run dev
-# или
-yarn dev
-```
-#### 3.4. Запуск в режиме продакшна
-```bash
-npm run build:prod
-# или
-yarn build:prod
+docker compose up --build
 ```
 
+Запуск в фоне:
 
-## 📄 Лицензия
-Этот проект распространяется под лицензией [Academic Free License v3.0](https://github.com/Denchikper/system-control-alerts/blob/main/LICENSE).
+```bash
+docker compose up --build -d
+```
+
+Пересобрать все образы:
+
+```bash
+docker compose build
+```
+
+Пересобрать только backend:
+
+```bash
+docker compose build server
+```
+
+Пересобрать только frontend:
+
+```bash
+docker compose build web
+```
+
+Остановить контейнеры:
+
+```bash
+docker compose down
+```
+
+Остановить контейнеры и удалить volume:
+
+```bash
+docker compose down -v
+```
+
+Логи всех сервисов:
+
+```bash
+docker compose logs -f
+```
+
+Логи backend:
+
+```bash
+docker compose logs -f server
+```
+
+Логи frontend:
+
+```bash
+docker compose logs -f web
+```
+
+### Linux host network
+
+Этот режим нужен для Linux-хоста, если backend должен видеть реальный IP подключающихся устройств.
+
+Запуск:
+
+```bash
+docker compose -f docker-compose.hostnet.yaml up --build
+```
+
+Запуск в фоне:
+
+```bash
+docker compose -f docker-compose.hostnet.yaml up --build -d
+```
+
+Остановить:
+
+```bash
+docker compose -f docker-compose.hostnet.yaml down
+```
+
+Остановить и удалить volume:
+
+```bash
+docker compose -f docker-compose.hostnet.yaml down -v
+```
+
+Логи:
+
+```bash
+docker compose -f docker-compose.hostnet.yaml logs -f
+```
+
+### GitHub Packages / GHCR
+
+В репозитории есть workflow:
+
+`[.github/workflows/publish-ghcr.yml](/d:/Development/system-conrtol-alerts/.github/workflows/publish-ghcr.yml)`
+
+Что он делает:
+
+- на `push` в `main` собирает `server` и `web`
+- публикует Docker-образы в `ghcr.io`
+- на тегах `v*` публикует тегированные образы
+- на `pull_request` только проверяет сборку без публикации
+
+Имена образов:
+
+- `ghcr.io/<owner>/system-control-alerts-server`
+- `ghcr.io/<owner>/system-control-alerts-web`
+
+Запуск из готовых образов GHCR:
+
+```bash
+docker compose -f docker-compose.ghcr.yaml pull
+docker compose -f docker-compose.ghcr.yaml up -d
+```
+
+#### Что нужно для работы CI/CD
+
+- репозиторий должен быть на GitHub
+- workflow запускается после `push` в `main`
+- публикация идёт в `ghcr.io` через встроенный `GITHUB_TOKEN`
+- образы публикуются автоматически, отдельный ручной логин в workflow не нужен
+
+#### Какие образы публикуются
+
+- backend: `ghcr.io/<owner>/system-control-alerts-server`
+- frontend: `ghcr.io/<owner>/system-control-alerts-web`
+
+`latest` публикуется для default branch, также создаются теги по branch/tag/sha.
+
+#### Как обновлять сервер из GHCR
+
+После публикации новой версии на сервере достаточно выполнить:
+
+```bash
+docker compose -f docker-compose.ghcr.yaml pull
+docker compose -f docker-compose.ghcr.yaml up -d
+```
+
+#### Ручное обновление сервера
+
+Если сервер доступен только из локальной сети, рабочая схема такая:
+
+1. Вы пушите изменения в `main`
+2. GitHub Actions публикует новые образы в `ghcr.io`
+3. Вы заходите на сервер вручную
+4. В папке проекта выполняете:
+
+```bash
+docker compose -f docker-compose.ghcr.yaml pull
+docker compose -f docker-compose.ghcr.yaml up -d
+```
+
+Что делают команды:
+
+- `docker compose -f docker-compose.ghcr.yaml pull` скачивает свежие образы `server` и `web`
+- `docker compose -f docker-compose.ghcr.yaml up -d` перезапускает контейнеры на новых образах
+
+Если образы в GHCR приватные, на сервере нужно один раз выполнить:
+
+```bash
+docker login ghcr.io
+```
+
+Если нужно пересоздать контейнеры принудительно:
+
+```bash
+docker compose -f docker-compose.ghcr.yaml down
+docker compose -f docker-compose.ghcr.yaml up -d
+```
+
+#### Полезный сценарий релиза
+
+1. Внести изменения в `server` или `web`
+2. Запушить в `main`
+3. Дождаться завершения workflow `Publish Docker Images`
+4. На сервере выполнить `docker compose -f docker-compose.ghcr.yaml pull`
+5. На сервере выполнить `docker compose -f docker-compose.ghcr.yaml up -d`
+
+#### Что использовать для деплоя
+
+- для локальной сборки и тестов: `docker-compose.yaml`
+- для Linux с реальным IP устройств: `docker-compose.hostnet.yaml`
+- для запуска уже опубликованных образов из GitHub Packages: `docker-compose.ghcr.yaml`
+
+## Доступ после запуска
+
+- Frontend: `http://localhost:3000`
+- Backend API и WebSocket: `http://localhost:2255`
+- Устройства подключаются к backend напрямую по `ws://<host>:2255`
+
+## Примечания
+
+- В обычном Docker-режиме backend может видеть IP клиента как адрес docker bridge, а не реальный IP устройства.
+- Для работы с реальным source IP используйте Linux и `docker-compose.hostnet.yaml`.
+- Backend обращается к устройствам по IP из базы как обычный сетевой клиент, поэтому доступ к устройствам в LAN должен быть открыт с машины, где запущен Docker.
