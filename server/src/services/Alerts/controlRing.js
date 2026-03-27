@@ -1,8 +1,7 @@
 const logger = require('../../utils/logger');
 const Channel = require('../../models/Channel');
 
-const DEVICE_ID = 'a41942b7-4f77-4b13-90d5-da88294125f1';
-
+const DEVICE_ID = 'a41942b7-4f77-4b13-90d5-da88294125f1'
 
 const controlRing = async () => {
   try {
