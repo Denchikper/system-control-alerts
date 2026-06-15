@@ -19,11 +19,11 @@ export default function CreateScheduleModal({ onClose, onCreate }) {
       />
 
       {/* Modal */}
-      <div className="relative z-10 w-[90vw] max-w-md bg-[#0D1117] rounded-2xl p-6 flex flex-col gap-5">
+      <div className="relative z-10 w-[90vw] max-w-md bg-[var(--bg)] rounded-2xl p-6 flex flex-col gap-5">
         
         {/* Header */}
         <div className="flex items-center justify-center">
-          <h2 className="text-lg font-semibold text-white">
+          <h2 className="text-lg font-semibold text-[var(--text)]">
             Создание расписания
           </h2>
         </div>
@@ -33,14 +33,14 @@ export default function CreateScheduleModal({ onClose, onCreate }) {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Введите название расписания"
-          className="w-full px-4 py-2 rounded-lg bg-[#161B22] border border-white/10 text-white placeholder:text-gray-400 focus:outline-none focus:border-blue-500"
+          className="w-full px-4 py-2 rounded-lg bg-[var(--surface-2)] border border-[var(--border)] text-[var(--text)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-blue-500"
         />
 
         {/* Footer */}
         <div className="flex justify-center gap-3 mt-2">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-[#21262D] hover:bg-[#30363D]"
+            className="px-4 py-2 rounded-lg bg-[var(--surface-2)] hover:bg-[var(--surface-3)]"
           >
             Отменить
           </button>

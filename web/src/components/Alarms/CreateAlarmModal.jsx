@@ -47,20 +47,20 @@ export default function CreateAlarmModal({ isOpen, onClose, onCreate, initialDat
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 animate-fadeIn">
-      <div className="bg-[#151A22] border border-gray-700 rounded-2xl p-6 w-full max-w-md shadow-xl transform transition-all duration-300 animate-modalEnter">
-        <h2 className="text-xl font-semibold mb-4 text-center text-gray-100">
+      <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-6 w-full max-w-md shadow-xl transform transition-all duration-300 animate-modalEnter">
+        <h2 className="text-xl font-semibold mb-4 text-center text-[var(--text)]">
           {initialData ? "Редактировать тревогу" : "Создать новую тревогу"}
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Название */}
           <div>
-            <label className="block text-sm text-gray-400 mb-1">Название тревоги</label>
+            <label className="block text-sm text-[var(--text-muted)] mb-1">Название тревоги</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full bg-[#0E1117] border border-gray-600 rounded-lg px-3 py-2 text-gray-100 
+              className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-lg px-3 py-2 text-[var(--text)] 
                          placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors duration-200"
               placeholder="Например: Пожарная тревога"
             />
@@ -68,11 +68,11 @@ export default function CreateAlarmModal({ isOpen, onClose, onCreate, initialDat
 
           {/* Описание */}
           <div>
-            <label className="block text-sm text-gray-400 mb-1">Название с пульта</label>
+            <label className="block text-sm text-[var(--text-muted)] mb-1">Название с пульта</label>
             <input
               value={name_remote}
               onChange={(e) => setName_remote(e.target.value)}
-              className="w-full bg-[#0E1117] border border-gray-600 rounded-lg px-3 py-2 text-gray-100
+              className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-lg px-3 py-2 text-[var(--text)]
                          placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors duration-200"
               placeholder="Например: fire"
             />
@@ -80,16 +80,16 @@ export default function CreateAlarmModal({ isOpen, onClose, onCreate, initialDat
 
           {/* Канал */}
           <div className="relative ">
-            <label className="block text-sm text-gray-400 mb-1">Канал</label>
+            <label className="block text-sm text-[var(--text-muted)] mb-1">Канал</label>
             <div
               onClick={toggleDropdown}
-              className="w-full bg-[#0E1117] border border-gray-600 rounded-lg px-3 py-2 text-gray-100 cursor-pointer flex justify-between items-center 
+              className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-lg px-3 py-2 text-[var(--text)] cursor-pointer flex justify-between items-center 
                          focus:outline-none focus:border-blue-500 transition-all duration-200 "
             >
               <span>{channelOptions.find((opt) => opt.value === channel)?.label}</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
+                className={`w-4 h-4 text-[var(--text-muted)] transition-transform duration-200 ${
                   isDropdownOpen ? "rotate-180" : ""
                 }`}
                 fill="none"
@@ -101,13 +101,13 @@ export default function CreateAlarmModal({ isOpen, onClose, onCreate, initialDat
             </div>
 
             {isDropdownOpen && (
-              <div className="absolute w-full mt-1 bg-[#0E1117] border border-gray-700 rounded-lg shadow-lg max-h-48 overflow-y-auto animate-fadeIn z-50">
+              <div className="absolute w-full mt-1 bg-[var(--bg)] border border-[var(--border)] rounded-lg shadow-lg max-h-48 overflow-y-auto animate-fadeIn z-50">
                 {channelOptions.map((opt) => (
                   <div
                     key={opt.value}
                     onClick={() => selectOption(opt.value)}
-                    className={`px-3 py-2 cursor-pointer hover:bg-gray-700 transition-colors ${
-                      opt.value === channel ? "bg-gray-700" : ""
+                    className={`px-3 py-2 cursor-pointer hover:bg-[var(--surface-2)] transition-colors ${
+                      opt.value === channel ? "bg-[var(--surface-2)]" : ""
                     }`}
                   >
                     {opt.label}
@@ -131,7 +131,7 @@ export default function CreateAlarmModal({ isOpen, onClose, onCreate, initialDat
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition-all duration-200 text-sm cursor-pointer"
+              className="px-4 py-2 rounded-lg bg-[var(--surface-2)] hover:bg-[var(--surface-3)] transition-all duration-200 text-sm cursor-pointer"
             >
               Отмена
             </button>

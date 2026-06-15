@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import DaysList from "./schoolRings/DaysList";
 import StyledSelect from "../ui/StyledSelect";
 import { daysListGet } from "../../api/alerts/days";
-import { activateSchedule, deleteSchedules, schedulesActiveListGet, schedulesCreate, schedulesListGet } from "../../api/alerts/schedules";
+import { activateSchedule, deactivateSchedule, deleteSchedules, schedulesActiveListGet, schedulesCreate, schedulesListGet } from "../../api/alerts/schedules";
 import { scenariosGet } from "../../api/alerts/scenarios";
 import EditScheduleMenu from "./schoolRings/Editable/EditScheduleMenu";
 import ConfirmDeleteScheduleModal from "./schoolRings/Editable/ConfirmDeleteScheduleModal";
@@ -73,6 +73,11 @@ export default function SchoolTab({ token,  logout, navigate}) {
     updateActiveSchedule();
   };
 
+  const handleDeactivate = async () => {
+    const res = await deactivateSchedule(token, logout, navigate);
+    if (res.ok) setActiveSchedule({});
+  };
+
   const updateActiveSchedule = async () => {
     const resAсtiveSchedules = await schedulesActiveListGet(token, logout, navigate);
     if (resAсtiveSchedules.ok && resAсtiveSchedules.data.length > 0) {
@@ -119,11 +124,11 @@ export default function SchoolTab({ token,  logout, navigate}) {
 
   return (
     <div className="flex flex-col gap-10">
-      <div className="flex items-center justify-between w-full">
-        <div className="flex items-center gap-4">
-          <div className="w-60">
+      <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between w-full">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+          <div className="w-full sm:w-60">
             <StyledSelect
-              style="appearance-none max-w-60 bg-[#151921] text-gray-200 border border-gray-700 rounded-lg py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+              style="appearance-none max-w-60 bg-[var(--surface)] text-[var(--text)] border border-[var(--border)] rounded-lg py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
               options={schedules.map((s) => ({ value: s.id, label: s.name }))}
               value={selectedSchedule}
               onChange={(e) => setSelectedSchedule(Number(e.target.value))}
@@ -136,10 +141,18 @@ export default function SchoolTab({ token,  logout, navigate}) {
           >
             Активировать
           </button>
+          {activeSchedule?.id && (
+            <button
+              onClick={handleDeactivate}
+              className="px-5 py-2 rounded-lg bg-[var(--surface-2)] hover:bg-[var(--surface-3)] text-[var(--text)] transition-all duration-200 text-sm font-medium cursor-pointer"
+            >
+              Выключить
+            </button>
+          )}
         </div>
 
         <div className="flex items-center gap-4 ">
-          <span className="inline-flex items-center justify-center w-[280px] px-3 py-1 bg-gray-800 text-white text-sm font-medium rounded-full shadow-sm">
+          <span className="inline-flex items-center justify-center w-full sm:w-[280px] px-3 py-1 bg-[var(--surface-2)] text-[var(--text)] text-sm font-medium rounded-full shadow-sm">
             <svg
               className="w-3 h-3 mr-2 shrink-0 text-green-400"
               fill="currentColor"
@@ -152,9 +165,11 @@ export default function SchoolTab({ token,  logout, navigate}) {
               </span>
           </span>
 
-          <button onClick={() => setIsEditOpen(true)} className="px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-700  transition-colors duration-200 text-sm font-medium cursor-pointer">
-            Управление расписанием
-          </button>
+          {selectedSchedule && (
+            <button onClick={() => setIsEditOpen(true)} className="px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-700  transition-colors duration-200 text-sm font-medium cursor-pointer">
+              Управление расписанием
+            </button>
+          )}
           <button onClick={() => setCreateScheduleModalOpen(true)} className="px-3 py-2 rounded-lg bg-green-600 hover:bg-green-700  transition-colors duration-200 text-sm font-medium cursor-pointer">
             Создать
           </button>

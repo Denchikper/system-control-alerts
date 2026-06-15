@@ -121,7 +121,7 @@ export default function ClockBar({ token, logout, navigate }) {
   if (!token) return;
 
   return (
-    <div className="flex space-x-6 text-gray-200 text-center">
+    <div className="flex space-x-6 text-[var(--text)] text-center">
       <div>Локальное время: {`${formatTime(localTime.hours)}:${formatTime(localTime.minutes)}:${formatTime(localTime.seconds)}`}</div>
       <div>Серверное время: {`${formatTime(serverTime.hours)}:${formatTime(serverTime.minutes)}:${formatTime(serverTime.seconds)}`}</div>
     </div>

@@ -7,16 +7,21 @@ exports.login = async (req, res) => {
   const { username, password } = req.body;
 
   try {
+    const ip = req.ip || req.socket?.remoteAddress || null;
     const user = await User.findOne({ where: { username } });
 
     if (!user) {
+      logger.audit('Неудачный вход', { username, ip, meta: { reason: 'user_not_found' } });
       return res.status(401).json({ message: 'Неверный логин или пароль' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password_hash);
     if (!isMatch) {
+      logger.audit('Неудачный вход', { username, ip, meta: { reason: 'bad_password' } });
       return res.status(401).json({ message: 'Неверный логин или пароль' });
     }
+
+    logger.audit('Вход в систему', { username: user.username, ip });
 
     const token = generateToken({ 
       userId: user.id, 

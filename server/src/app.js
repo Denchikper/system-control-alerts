@@ -4,10 +4,12 @@ const helmet = require('helmet');
 const app = express();
 
 const routes = require('./routers');
+const auditMiddleware = require('./middleware/audit');
 
 app.use(cors());
 app.use(helmet());
 app.use(express.json()); // чтобы принимать JSON
+app.use('/api', auditMiddleware); // аудит изменяющих запросов
 app.use('/api', routes); // все маршруты начинаются с /api
 
 

@@ -9,6 +9,8 @@ require('./User');
 require('./Devices');
 require("./Channel")
 require('./Alarm');
+require('./Role');
+require('./Log');
 
 Schedule.hasMany(ScheduleScenario, { foreignKey: 'schedule_id' });
 ScheduleScenario.belongsTo(Schedule, { foreignKey: 'schedule_id' });

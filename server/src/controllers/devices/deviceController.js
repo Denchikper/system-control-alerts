@@ -1,4 +1,5 @@
 const Device = require("../../models/Devices.js");
+const { generateDeviceToken } = require("../../utils/databaseSync.js");
 
 // Получить все устройства
 exports.getAllDevices = async (req, res) => {
@@ -22,6 +23,7 @@ exports.createDevice = async (req, res) => {
       device_type,
       ip_address,
       description,
+      auth_token: generateDeviceToken(),
     });
 
     res.status(201).json(newDevice);
@@ -45,6 +47,23 @@ exports.updateDevice = async (req, res) => {
   } catch (error) {
     console.error("Ошибка при обновлении устройства:", error);
     res.status(500).json({ error: "Ошибка при обновлении устройства" });
+  }
+}
+
+// Перевыпустить auth_token устройства
+exports.regenerateDeviceToken = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const device = await Device.findByPk(id);
+    if (!device) return res.status(404).json({ error: "Устройство не найдено" });
+
+    device.auth_token = generateDeviceToken();
+    await device.save();
+
+    res.json(device);
+  } catch (error) {
+    console.error("Ошибка при перевыпуске токена устройства:", error);
+    res.status(500).json({ error: "Ошибка при перевыпуске токена устройства" });
   }
 }
 

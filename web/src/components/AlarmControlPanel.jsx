@@ -87,20 +87,20 @@ export default function AlarmControlPanel({ token, logout, navigate, setActiveAl
   return (
     <>
       <div
-        className="min-w-40 bg-[#151A22] border border-gray-700 rounded-2xl p-6 shadow-lg
+        className="min-w-40 bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-6 shadow-lg
                    transition-all duration-300 flex flex-col"
         style={{ height: alarms.length <= 8 ? `${160 + Math.ceil(alarms.length / 2) * 70}px` : "480px" }}
       >
-        <h3 className="text-lg font-semibold mb-5 text-gray-100 text-center">
+        <h3 className="text-lg font-semibold mb-5 text-[var(--text)] text-center">
           Управление тревогами
         </h3>
 
         {(!alarms || alarms.length === 0) ? (
-          <p className="text-gray-400 text-center -mt-2.5">Сервер недоступен или тревоги не найдены</p>
+          <p className="text-[var(--text-muted)] text-center -mt-2.5">Сервер недоступен или тревоги не найдены</p>
         ) : (
 <div className="grid grid-cols-2 gap-3 flex-1 overflow-y-auto pr-2 custom-scrollbar">
   {alarmList.length === 0 ? (
-    <p className="text-gray-400 text-center mt-20">Сервер недоступен или тревоги не найдены</p>
+    <p className="text-[var(--text-muted)] text-center mt-20">Сервер недоступен или тревоги не найдены</p>
   ) : (
     alarmList.map((alarm) => (
       <button
@@ -108,7 +108,7 @@ export default function AlarmControlPanel({ token, logout, navigate, setActiveAl
         onClick={() => openConfirm(alarm)}
         className="px-4 py-3 rounded-lg border text-left font-medium 
                    transition-all duration-300 shadow-md relative text-sm
-                   bg-[#1A1F29] border-gray-700 hover:bg-[#222832] text-gray-100 hover:scale-[1.004]"
+                   bg-[var(--surface)] border-[var(--border)] hover:bg-[var(--surface-2)] text-[var(--text)] hover:scale-[1.004]"
       >
         {alarm.name}
       </button>

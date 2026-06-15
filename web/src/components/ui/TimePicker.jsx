@@ -18,10 +18,10 @@ export default function TimePicker({ value, onChange }) {
       {/* input button */}
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex justify-between items-center px-3 py-2 bg-[#161B22] border border-gray-700 rounded-lg text-sm text-gray-200 hover:border-blue-500 transition-colors"
+        className="w-full flex justify-between items-center px-3 py-2 bg-[var(--surface-2)] border border-[var(--border)] rounded-lg text-sm text-[var(--text)] hover:border-blue-500 transition-colors"
       >
         <span>{h}</span>
-        <span className="text-gray-400">:</span>
+        <span className="text-[var(--text-muted)]">:</span>
         <span>{m}</span>
         <svg
           className={`w-4 h-4 ml-2 transition-transform ${open ? "rotate-180" : ""}`}
@@ -35,16 +35,16 @@ export default function TimePicker({ value, onChange }) {
 
       {/* dropdown */}
       {open && (
-        <div className="absolute z-50 mt-1 flex w-full bg-[#0D1117] border border-gray-700 rounded-lg shadow-lg overflow-hidden">
+        <div className="absolute z-50 mt-1 flex w-full bg-[var(--bg)] border border-[var(--border)] rounded-lg shadow-lg overflow-hidden">
           
           {/* часы */}
-          <div className="max-h-40 overflow-y-auto w-1/2 border-r border-gray-700">
+          <div className="max-h-40 overflow-y-auto w-1/2 border-r border-[var(--border)]">
             {Array.from({ length: 24 }, (_, i) => String(i).padStart(2, "0")).map((hour) => (
               <button
                 key={hour}
                 onClick={() => onChange(`${hour}:${m}`)}
                 className={`w-full px-3 py-2 text-sm text-left hover:bg-blue-600 transition-colors ${
-                  hour === h ? "bg-blue-700 text-white font-bold" : "text-gray-200"
+                  hour === h ? "bg-blue-700 text-white font-bold" : "text-[var(--text)]"
                 }`}
               >
                 {hour}
@@ -59,7 +59,7 @@ export default function TimePicker({ value, onChange }) {
                 key={min}
                 onClick={() => onChange(`${h}:${min}`)}
                 className={`w-full px-3 py-2 text-sm text-left hover:bg-blue-600 transition-colors ${
-                  min === m ? "bg-blue-700 text-white font-bold" : "text-gray-200"
+                  min === m ? "bg-blue-700 text-white font-bold" : "text-[var(--text)]"
                 }`}
               >
                 {min}

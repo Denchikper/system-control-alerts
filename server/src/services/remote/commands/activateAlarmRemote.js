@@ -3,8 +3,9 @@ const Channel = require('../../../models/Channel');
 const deactivateAlarmRemote = require('./deactivateAlarmRemote');
 const Alarm = require('../../../models/Alarm');
 const { checkDutyCode } = require('../checkDutyCode');
+const config = require('../../../config');
 
-const DEVICE_ID = 'a41942b7-4f77-4b13-90d5-da88294125f1'; // конкретное устройство
+const DEVICE_ID = config.relayDeviceId; // целевое реле из конфига
 
 var isTrain = false
 

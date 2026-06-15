@@ -5,7 +5,7 @@ import DeviceItem from "../components/Devices/DeviceItem";
 import CreateDeviceModal from "../components/Devices/CreateDeviceModal";
 import ConfirmDeleteModal from "../components/Devices/ConfirmDeleteModal";
 
-import { getDevices, createDevice, updateDevice, deleteDevice } from "../api/devices/devices";
+import { getDevices, createDevice, updateDevice, deleteDevice, regenerateDeviceToken } from "../api/devices/devices";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -80,6 +80,16 @@ export default function DevicesPage() {
     }
   }
 
+  // перевыпустить токен устройства
+  async function handleRegenerateToken(id) {
+    try {
+      await regenerateDeviceToken(token, id, logout, navigate);
+      await loadDevices();
+    } catch (err) {
+      console.error("Ошибка перевыпуска токена устройства:", err);
+    }
+  }
+
   // открыть подтверждение удаления
   function handleDeleteClick(id, name) {
     setDeleteModal({ isOpen: true, id, name });
@@ -100,9 +110,9 @@ export default function DevicesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0B0E13] text-gray-100">
+      <div className="min-h-screen bg-[var(--bg)] text-[var(--text)]">
         <Navbar />
-        <div className="max-w-5xl mx-auto mt-8 px-6">
+        <div className="max-w-5xl mx-auto mt-8 px-4 sm:px-6">
           <p className="text-center py-8">Загрузка устройств...</p>
         </div>
       </div>
@@ -110,12 +120,12 @@ export default function DevicesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0B0E13] text-gray-100 ">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] ">
       <Navbar />
 
-      <div className="max-w-5xl mx-auto mt-8 px-6 pb-10">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-semibold">Список устройств</h1>
+      <div className="max-w-5xl mx-auto mt-6 sm:mt-8 px-4 sm:px-6 pb-10">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+          <h1 className="text-xl sm:text-2xl font-semibold">Список устройств</h1>
           <div className="flex items-center gap-3">
             <button
               onClick={openCreate}
@@ -126,7 +136,7 @@ export default function DevicesPage() {
             <button
               onClick={loadDevices}
               title="Обновить"
-              className="px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg cursor-pointer"
+              className="px-3 py-2 bg-[var(--surface-2)] hover:bg-[var(--surface-3)] rounded-lg cursor-pointer"
             >
               Обновить
             </button>
@@ -137,7 +147,7 @@ export default function DevicesPage() {
 
         <div className="space-y-4 animate-modalEnter">
           {devices.length === 0 ? (
-            <p className="text-gray-400 text-center py-6">Нет зарегистрированных устройств</p>
+            <p className="text-[var(--text-muted)] text-center py-6">Нет зарегистрированных устройств</p>
           ) : (
             devices.map((device) => (
               <DeviceItem
@@ -145,6 +155,7 @@ export default function DevicesPage() {
                 device={device}
                 onEdit={() => openEdit(device)}
                 onDelete={() => handleDeleteClick(device.id, device.name)}
+                onRegenerateToken={() => handleRegenerateToken(device.id)}
               />
             ))
           )}

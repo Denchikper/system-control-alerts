@@ -30,6 +30,10 @@ const Device = sequelize.define('Device', {
   is_online: {
     type: DataTypes.BOOLEAN,
     defaultValue: false
+  },
+  auth_token: { // секрет устройства для аутентификации по WebSocket
+    type: DataTypes.STRING,
+    allowNull: true
   }
 }, {
   tableName: 'devices',

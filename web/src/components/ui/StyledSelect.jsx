@@ -2,7 +2,7 @@ import React from "react";
 
 export default function StyledSelect({ style, options, value, onChange, placeholder }) {
   // базовый класс
-  const baseClass = "appearance-none w-full bg-[#151921] text-gray-200 border border-gray-700 rounded-lg py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200";
+  const baseClass = "appearance-none w-full bg-[var(--surface)] text-[var(--text)] border border-[var(--border)] rounded-lg py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200";
 
   return (
     <div className="relative inline-block w-full">
@@ -27,7 +27,7 @@ export default function StyledSelect({ style, options, value, onChange, placehol
       <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-4 w-4 text-gray-400"
+          className="h-4 w-4 text-[var(--text-muted)]"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"

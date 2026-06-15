@@ -21,7 +21,7 @@
     }, [token, logout, navigate]);
 
     return (
-      <div className="bg-[#151A22] border border-gray-700 p-6 rounded-2xl shadow-lg w-full max-w-sm text-gray-200 max-h-110">
+      <div className="bg-[var(--surface)] border border-[var(--border)] p-6 rounded-2xl shadow-lg w-full max-w-sm text-[var(--text)] max-h-110">
         <h2 className="text-xl font-semibold text-center flex items-center justify-center gap-2">Состояние системы</h2>
 
         <p className={`text-center text-sm font-medium mb-5 ${
@@ -30,15 +30,15 @@
           {serverConnected ? "Сервер подключен" : "Сервер недоступен"}
         </p>
 
-        <div className="border-t border-gray-700 pt-3 mb-5">
+        <div className="border-t border-[var(--border)] pt-3 mb-5">
           <ClockBar 
               token={token}
               logout={logout}
               navigate={navigate}/>
         </div>
 
-        <div className="border-t border-gray-700 pt-3 mb-5">
-          <p className="text-center text-gray-400 uppercase tracking-wide">Активная тревога</p>
+        <div className="border-t border-[var(--border)] pt-3 mb-5">
+          <p className="text-center text-[var(--text-muted)] uppercase tracking-wide">Активная тревога</p>
           <p
             className={`text-center mt-2 font-bold text-l py-2 rounded-lg ${
               activeAlarm === "Нет активных тревог"
@@ -50,8 +50,8 @@
           </p>
         </div>
 
-      <div className="border-t border-gray-700 pt-3 mb-4">
-    <p className="text-center text-gray-400 uppercase tracking-wide mb-2">Устройства</p>
+      <div className="border-t border-[var(--border)] pt-3 mb-4">
+    <p className="text-center text-[var(--text-muted)] uppercase tracking-wide mb-2">Устройства</p>
     {Array.isArray(devicesList) && devicesList.length > 0 ? (
       devicesList.map((device, i) => (
         <div key={i} className="flex justify-between">

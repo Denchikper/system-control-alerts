@@ -6,6 +6,7 @@ const authMiddleware = require('../../../middleware/authMiddleware');
 router.get('/', authMiddleware, scheduleController.getSchedules);
 router.get('/active', authMiddleware, scheduleController.getSchedulesActive);
 router.put('/activate/:id', authMiddleware, scheduleController.activateSchedule);
+router.put('/deactivate', authMiddleware, scheduleController.deactivateSchedule);
 router.post('/', authMiddleware, scheduleController.createSchedule);
 router.put('/:id', authMiddleware, scheduleController.updateSchedule);
 router.delete('/:id', authMiddleware, scheduleController.deleteSchedules);

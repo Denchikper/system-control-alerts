@@ -5,6 +5,8 @@
 WebsocketsClient client;
 
 const char* NameDevice = "WT32-ETH01_Receiver_Device_3    ";
+// Секрет устройства (auth_token из карточки устройства в веб-панели)
+const char* DeviceToken = "PASTE_DEVICE_AUTH_TOKEN_HERE";
 
 unsigned long lastPing = 0;
 unsigned long lastReconnectAttempt = 0;
@@ -44,6 +46,7 @@ void connectToServer(const char* ip_server) {
       StaticJsonDocument<200> doc;
       doc["type"] = "register";
       doc["nameDevice"] = NameDevice;
+      doc["token"] = DeviceToken;
       String json;
       serializeJson(doc, json);
       client.send(json);

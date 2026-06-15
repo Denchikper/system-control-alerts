@@ -65,44 +65,44 @@ export default function CreateDeviceModal({ isOpen, onClose, onCreate, initialDa
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 animate-fadeIn">
-      <div className="bg-[#151A22] border border-gray-700 rounded-2xl p-6 w-full max-w-md shadow-xl transform transition-all duration-300 animate-modalEnter">
-        <h2 className="text-xl font-semibold mb-4 text-center text-gray-100">
+      <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-6 w-full max-w-md shadow-xl transform transition-all duration-300 animate-modalEnter">
+        <h2 className="text-xl font-semibold mb-4 text-center text-[var(--text)]">
           {initialData ? "Редактировать устройство" : "Добавить устройство"}
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Название */}
           <div>
-            <label className="block text-sm text-gray-400 mb-1">Название</label>
+            <label className="block text-sm text-[var(--text-muted)] mb-1">Название</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full bg-[#0E1117] border border-gray-600 rounded-lg px-3 py-2 
-                         text-gray-100 placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-all duration-200"
+              className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-lg px-3 py-2 
+                         text-[var(--text)] placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-all duration-200"
               placeholder="Например: Relay Controller"
             />
           </div>
 
           {/* Имя устройства */}
           <div>
-            <label className="block text-sm text-gray-400 mb-1">Имя устройства</label>
+            <label className="block text-sm text-[var(--text-muted)] mb-1">Имя устройства</label>
             <input
               type="text"
               value={deviceName}
               onChange={(e) => setDeviceName(e.target.value)}
-              className="w-full bg-[#0E1117] border border-gray-600 rounded-lg px-3 py-2 
-                         text-gray-100 placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-all duration-200"
+              className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-lg px-3 py-2 
+                         text-[var(--text)] placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-all duration-200"
               placeholder="Relay_device"
             />
           </div>
 
           {/* Тип устройства */}
           <div className="relative">
-            <label className="block text-sm text-gray-400 mb-1">Тип устройства</label>
+            <label className="block text-sm text-[var(--text-muted)] mb-1">Тип устройства</label>
             <div
               onClick={toggleDropdown}
-              className="w-full bg-[#0E1117] border border-gray-600 rounded-lg px-3 py-2 text-gray-100 
+              className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-lg px-3 py-2 text-[var(--text)] 
                          cursor-pointer flex justify-between items-center focus:outline-none 
                          focus:border-blue-500 transition-all duration-200"
             >
@@ -111,7 +111,7 @@ export default function CreateDeviceModal({ isOpen, onClose, onCreate, initialDa
               </span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
+                className={`w-4 h-4 text-[var(--text-muted)] transition-transform duration-200 ${
                   isDropdownOpen ? "rotate-180" : ""
                 }`}
                 fill="none"
@@ -123,14 +123,14 @@ export default function CreateDeviceModal({ isOpen, onClose, onCreate, initialDa
             </div>
 
             {isDropdownOpen && (
-              <div className="absolute w-full mt-1 bg-[#0E1117] border border-gray-700 rounded-lg shadow-lg 
+              <div className="absolute w-full mt-1 bg-[var(--bg)] border border-[var(--border)] rounded-lg shadow-lg 
                               max-h-48 overflow-y-auto animate-fadeIn z-50">
                 {deviceTypes.map((type) => (
                   <div
                     key={type.value}
                     onClick={() => selectType(type.value)}
-                    className={`px-3 py-2 cursor-pointer hover:bg-gray-700 transition-colors ${
-                      type.value === deviceType ? "bg-gray-700" : ""
+                    className={`px-3 py-2 cursor-pointer hover:bg-[var(--surface-2)] transition-colors ${
+                      type.value === deviceType ? "bg-[var(--surface-2)]" : ""
                     }`}
                   >
                     {type.label}
@@ -142,24 +142,24 @@ export default function CreateDeviceModal({ isOpen, onClose, onCreate, initialDa
 
           {/* IP адрес */}
           <div>
-            <label className="block text-sm text-gray-400 mb-1">IP адрес</label>
+            <label className="block text-sm text-[var(--text-muted)] mb-1">IP адрес</label>
             <input
               type="text"
               value={ipAddress}
               onChange={(e) => setIpAddress(e.target.value)}
-              className="w-full bg-[#0E1117] border border-gray-600 rounded-lg px-3 py-2 
-                         text-gray-100 placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-all duration-200"
+              className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-lg px-3 py-2 
+                         text-[var(--text)] placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-all duration-200"
               placeholder="192.168.1.10"
             />
           </div>
 
           {/* Описание */}
           <div>
-            <label className="block text-sm text-gray-400 mb-1">Описание</label>
+            <label className="block text-sm text-[var(--text-muted)] mb-1">Описание</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full bg-[#0E1117] border border-gray-600 rounded-lg px-3 py-2 text-gray-100 h-20 resize-none
+              className="w-full bg-[var(--bg)] border border-[var(--border)] rounded-lg px-3 py-2 text-[var(--text)] h-20 resize-none
                          placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-all duration-200"
               placeholder="Дополнительная информация..."
             />
@@ -170,7 +170,7 @@ export default function CreateDeviceModal({ isOpen, onClose, onCreate, initialDa
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition-all duration-200 text-sm cursor-pointer"
+              className="px-4 py-2 rounded-lg bg-[var(--surface-2)] hover:bg-[var(--surface-3)] transition-all duration-200 text-sm cursor-pointer"
             >
               Отмена
             </button>

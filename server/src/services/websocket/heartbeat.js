@@ -1,5 +1,7 @@
+const config = require('../../config');
+
 module.exports = function setupHeartbeat(server) {
-  const interval = parseInt(process.env.WS_HEARTBEAT_DEVICES_INTERVAL) || 30000;
+  const interval = config.wsHeartbeatInterval;
 
   setInterval(() => {
     for (const ws of server.wss.clients) {

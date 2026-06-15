@@ -1,11 +1,13 @@
 const { createLogger, format, transports } = require('winston');
 const path = require('path');
 const chalk = require('chalk');
+const DBLogTransport = require('./dbLogTransport');
 
 const customLevels = {
   levels: {
     remote_error: 0,     // ← самый низкий уровень
     remote_warn: 1,
+    audit: 2,            // действия пользователей / события системы
     remote_success: 2,
     server_error: 3,
     server_warn: 4,
@@ -90,15 +92,18 @@ const logger = createLogger({
       filename: path.join(__dirname, '../../logs/remote_error.log'), 
       level: 'remote_error' 
     }),
-    new transports.File({ 
-      filename: path.join(__dirname, '../../logs/remote_combined.log'), 
-      level: 'remote_warn' 
+    new transports.File({
+      filename: path.join(__dirname, '../../logs/remote_combined.log'),
+      level: 'remote_warn'
     }),
+    // Пишем всё в таблицу logs (level 'info' = самый высокий номер → ловит все уровни)
+    new DBLogTransport({ level: 'info' }),
   ],
 });
 
-// Консольный транспорт только для не-продакшн
-if (process.env.NODE_ENV !== 'p') {
+// Консольный транспорт включён всегда (в т.ч. в production) — деплой идёт в Docker,
+// а просмотр логов выполняется через `docker compose logs`.
+{
   logger.add(
     new transports.Console({
       format: format.printf(({ level, message, ...meta }) => {
@@ -197,6 +202,8 @@ logger.remote_success = (msg, meta) => logger.log({ level: 'remote_success', mes
 logger.remote_warn = (msg, meta) => logger.log({ level: 'remote_warn', message: msg, ...meta });
 logger.remote_error = (msg, meta) => logger.log({ level: 'remote_error', message: msg, ...meta });
 logger.alertengine_success = (msg, meta) => logger.log({ level: 'alertengine_success', message: msg, ...meta });
+// Аудит действий: logger.audit('POST /alarm', { username, ip, meta })
+logger.audit = (msg, fields) => logger.log({ level: 'audit', message: msg, ...fields });
 logger.alertengine_warn = (msg, meta) => logger.log({ level: 'alertengine_warn', message: msg, ...meta });
 logger.alertengine_error = (msg, meta) => logger.log({ level: 'alertengine_error', message: msg, ...meta });
 

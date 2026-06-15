@@ -23,3 +23,9 @@ export async function deleteDevice(token, id, logout, navigate) {
     method: "DELETE"
   }, logout, navigate);
 }
+
+export async function regenerateDeviceToken(token, id, logout, navigate) {
+  return await fetchWithAuth(token, `/device/${id}/regenerate-token`, {
+    method: "POST"
+  }, logout, navigate);
+}

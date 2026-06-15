@@ -5,9 +5,9 @@ export default function ConfirmDeleteModal({ isOpen, onClose, onConfirm, deviceN
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-[#151A22] border border-gray-700 rounded-2xl p-6 w-full max-w-sm shadow-xl animate-fadeIn">
+      <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-6 w-full max-w-sm shadow-xl animate-fadeIn">
         <h2 className="text-xl font-semibold text-center mb-3">Удалить тревогу</h2>
-        <p className="text-gray-300 text-center mb-6">
+        <p className="text-[var(--text-soft)] text-center mb-6">
           Вы уверены, что хотите удалить устройство{" "}
           <span className="text-red-400 font-semibold">"{deviceName}"</span>?
         </p>
@@ -16,7 +16,7 @@ export default function ConfirmDeleteModal({ isOpen, onClose, onConfirm, deviceN
         <div className="flex justify-center space-x-4">
           <button
             onClick={onClose}
-            className="px-5 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition text-sm font-medium"
+            className="px-5 py-2 rounded-lg bg-[var(--surface-2)] hover:bg-[var(--surface-3)] transition text-sm font-medium"
           >
             Отмена
           </button>

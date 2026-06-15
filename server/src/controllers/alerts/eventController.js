@@ -1,10 +1,10 @@
-const e = require('express');
 const ScheduleEvent = require('../../models/ScheduleEvent');
+const config = require('../../config');
 
 exports.createEvent = async (req, res) => {
   try {
     const { scenario_id, event_order, start_time, end_time } = req.body;
-    const event = await ScheduleEvent.create({ scenario_id, event_order, start_time, end_time, channel_id: 6 });
+    const event = await ScheduleEvent.create({ scenario_id, event_order, start_time, end_time, channel_id: config.ringChannelId });
     res.json(event);
   } catch (err) {
     res.status(500).json({ error: err.message });

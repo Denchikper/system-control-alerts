@@ -2,17 +2,23 @@ const express = require('express');
 const router = express.Router();
 const alarmController = require('../../../controllers/alarms/alarmController');
 const authMiddleware = require('../../../middleware/authMiddleware');
+const { requirePermission, requireAnyPermission } = require('../../../middleware/authorize');
 
-// GET /api/alarms
-router.get('/', authMiddleware, alarmController.getAllAlarms);
+// Список тревог нужен и разделу "Тревоги", и блоку управления на дашборде
+const canRead = requireAnyPermission(['section:alarms', 'block:dashboard.alarmControl']);
+// Изменять определения тревог можно только в разделе "Тревоги"
+const canManage = requirePermission('section:alarms');
 
-// POST /api/alarms
-router.post('/', authMiddleware, alarmController.createAlarm);
+// GET /api/alarm
+router.get('/', authMiddleware, canRead, alarmController.getAllAlarms);
 
-// PUT /api/alarms/:id
-router.put('/:id', authMiddleware, alarmController.updateAlarm);
+// POST /api/alarm
+router.post('/', authMiddleware, canManage, alarmController.createAlarm);
 
-// DELETE /api/alarms/:id
-router.delete('/:id', authMiddleware, alarmController.deleteAlarm);
+// PUT /api/alarm/:id
+router.put('/:id', authMiddleware, canManage, alarmController.updateAlarm);
+
+// DELETE /api/alarm/:id
+router.delete('/:id', authMiddleware, canManage, alarmController.deleteAlarm);
 
 module.exports = router;

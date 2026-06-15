@@ -2,10 +2,10 @@ import React from "react";
 
 export default function AlarmItem({ alarm, onEdit, onDelete }) {
   return (
-    <div className="flex items-center justify-between bg-[#151A22] border border-gray-700 rounded-xl p-4 hover:bg-[#1A1F28] transition">
+    <div className="flex items-center justify-between bg-[var(--surface)] border border-[var(--border)] rounded-xl p-4 hover:bg-[var(--surface)] transition">
       <div>
         <p className="text-lg font-medium">{alarm.name}</p>
-        <p className="text-sm text-gray-400">{alarm.description}</p>
+        <p className="text-sm text-[var(--text-muted)]">{alarm.description}</p>
       </div>
 
       <div className="flex space-x-3">

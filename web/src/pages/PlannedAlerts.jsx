@@ -7,7 +7,6 @@ import PlannedTab from "../components/Alerts/PlannedTab.jsx";
 
 export default function PlannedAlertsPage() {
   const [activeTab, setActiveTab] = useState("school");
-  const [plannedAlerts, setPlannedAlerts] = useState([]);
   const [loading, setLoading] = useState(false);
   const { token, logout } = useAuth();
 
@@ -18,25 +17,25 @@ export default function PlannedAlertsPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0E1117] text-gray-200 flex flex-col select-none">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] flex flex-col select-none">
       <Navbar />
-      <div className="flex-1 flex flex-col items-center p-6">
+      <div className="flex-1 flex flex-col items-center p-4 sm:p-6">
 
         {/* Переключатель по центру */}
         <div className="mb-8">
-          <div className="inline-flex bg-[#161B22] rounded-xl p-1">
+          <div className="inline-flex bg-[var(--surface-2)] rounded-xl p-1">
             <button
               onClick={() => setActiveTab("school")}
-              className={`px-5 py-2 rounded-lg text-sm transition
-                ${activeTab === "school" ? "bg-blue-600 text-white" : "text-gray-400 hover:text-white" }`}
+              className={`px-3 sm:px-5 py-2 rounded-lg text-xs sm:text-sm transition
+                ${activeTab === "school" ? "bg-blue-600 text-white" : "text-[var(--text-muted)] hover:text-[var(--text)]" }`}
             >
               Школьные звонки
             </button>
 
             <button
               onClick={() => setActiveTab("planned")}
-              className={`px-5 py-2 rounded-lg text-sm transition
-                ${activeTab === "planned" ? "bg-blue-600 text-white" : "text-gray-400 hover:text-white" }`}
+              className={`px-3 sm:px-5 py-2 rounded-lg text-xs sm:text-sm transition
+                ${activeTab === "planned" ? "bg-blue-600 text-white" : "text-[var(--text-muted)] hover:text-[var(--text)]" }`}
             >
               Запланированные оповещения
             </button>
@@ -45,14 +44,14 @@ export default function PlannedAlertsPage() {
 
         {/* Контент */}
         <div className="w-full rounded-xl p-2 scrollbar-hidden overflow-y-auto scrollbar-hidden">
-          {loading && <p className="text-center text-gray-400">Загрузка...</p>}
+          {loading && <p className="text-center text-[var(--text-muted)]">Загрузка...</p>}
 
           {activeTab === "school" && !loading && (
             <SchoolTab token={token} logout={logout} navigate={navigate}/>
           )}
 
           {activeTab === "planned" && !loading && (
-            <PlannedTab plannedAlerts={plannedAlerts} />
+            <PlannedTab token={token} logout={logout} navigate={navigate} />
           )}
         </div>
       </div>

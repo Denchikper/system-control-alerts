@@ -1,7 +1,7 @@
 {
-  "name": "system-contorl-alerts",
+  "name": "system-control-alerts-server",
   "version": "1.2.0",
-  "description": "system-control-alerts",
+  "description": "system-control-alerts backend",
   "homepage": "https://github.com/Denchikper/system-control-alerts#readme",
   "bugs": {
     "url": "https://github.com/Denchikper/system-control-alerts/issues"
@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/Denchikper/system-control-alerts.git"
   },
-  "license": "ISC",
+  "license": "AFL-3.0",
   "author": "Daniil Mankus'",
   "type": "commonjs",
   "main": "server.js",

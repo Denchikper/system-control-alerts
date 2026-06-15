@@ -34,11 +34,11 @@ export default function ProfileMenu() {
       {open && (
         <div
           ref={menuRef}
-          className="absolute right-0 mt-2 w-64 bg-[#1A1F2C] border border-gray-700 rounded-lg shadow-lg p-4 text-gray-200 z-50"
+          className="absolute right-0 mt-2 w-64 bg-[var(--surface)] border border-[var(--border)] rounded-lg shadow-lg p-4 text-[var(--text)] z-50"
         >
           <p className="font-semibold text-center">{user?.firstName} {user?.secondName} {user?.lastName}</p>
-          <p className="text-sm text-gray-400 mt-1 text-center">Логин: {user?.username}</p>
-          <p className="text-sm text-gray-400 text-center">Роль: {user?.role}</p>
+          <p className="text-sm text-[var(--text-muted)] mt-1 text-center">Логин: {user?.username}</p>
+          <p className="text-sm text-[var(--text-muted)] text-center">Роль: {user?.role}</p>
           <button
             onClick={logout}
             className="mt-4 w-full py-1 bg-red-600 hover:bg-red-700 rounded-md text-white font-medium transition cursor-pointer"

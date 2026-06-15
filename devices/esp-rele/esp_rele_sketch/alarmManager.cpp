@@ -23,6 +23,8 @@ int currentIndex = 0;
 unsigned long lastSwitch = 0;
 bool channelOn = false;          // текущий статус канала в цикле
 int singleChannel = -1;          // для одиночного канала
+unsigned long singleStart = 0;       // момент включения одиночного канала
+unsigned long singleDuration = 0;    // длительность звонка, мс (0 = до ручного выключения)
 
 
 // --- Выключить все реле (HIGH = выкл, LOW = вкл) ---
@@ -76,6 +78,7 @@ void handleAlarmCommand(const String& jsonStr) {
     alarmActive = false;
     cycleMode = false;
     singleChannel = -1;
+    singleDuration = 0;
     deactivateAllRelays();
     return;
   }
@@ -98,6 +101,8 @@ void handleAlarmCommand(const String& jsonStr) {
     } else {
       // одиночный канал
       singleChannel = doc["channel"];
+      singleDuration = doc["duration"] | 0UL; // мс; 0/отсутствует = держать до deactivatealarm
+      singleStart = millis();
       setRelayState(singleChannel, true);
       alarmActive = true;
       cycleMode = false;
@@ -122,6 +127,12 @@ void updateAlarm() {
       channelOn = true;
     }
   } else if (!cycleMode && singleChannel != -1) {
-    // одиночный канал включен, просто удерживаем
+    // одиночный канал: если задана длительность — выключаем сами по её истечении
+    if (singleDuration > 0 && millis() - singleStart >= singleDuration) {
+      setRelayState(singleChannel, false);
+      alarmActive = false;
+      singleChannel = -1;
+      singleDuration = 0;
+    }
   }
 }

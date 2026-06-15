@@ -64,6 +64,14 @@ module.exports = async (server, ws, req) => {
           return;
         }
 
+        // Аутентификация по токену — решающая проверка
+        if (!device.auth_token || data.token !== device.auth_token) {
+          logger.ws_error(`Устройство "${data.nameDevice}" (${clientIp}): неверный или отсутствующий auth_token`);
+          ws.send(JSON.stringify({ type: 'error', message: 'Invalid device token' }));
+          ws.close();
+          return;
+        }
+
         if (ipMismatch && !isLikelyDockerBridgeIp(clientIp)) {
           logger.ws_error(
             `Устройство "${data.nameDevice}" подключается с IP ${clientIp}, но в БД указан ${device.ip_address}`

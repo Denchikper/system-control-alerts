@@ -26,6 +26,10 @@ exports.deleteSchedules = async (req, res) => {
   const transaction = await sequelize.transaction();
   try {
     const { id } = req.params;
+    if (!id || isNaN(Number(id))) {
+      await transaction.rollback();
+      return res.status(400).json({ error: 'Некорректный id расписания' });
+    }
     const schedule = await Schedule.findByPk(id, { transaction });
     if (!schedule) {
       await transaction.rollback();
@@ -91,6 +95,9 @@ exports.createSchedule = async (req, res) => {
 exports.activateSchedule = async (req, res) => {
   try {
     const { id } = req.params;
+    if (!id || isNaN(Number(id))) {
+      return res.status(400).json({ error: 'Некорректный id расписания' });
+    }
 
     const activSchedule = await Schedule.update({ is_active: false }, {where: {is_active: true}});
     if (!activSchedule) return res.status(404).json({ error: 'Schedule not found' });
@@ -105,9 +112,21 @@ exports.activateSchedule = async (req, res) => {
   }
 };
 
+exports.deactivateSchedule = async (req, res) => {
+  try {
+    await Schedule.update({ is_active: false }, { where: { is_active: true } });
+    res.json({ message: 'Активное расписание выключено' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 exports.updateSchedule = async (req, res) => {
   try {
     const { id } = req.params;
+    if (!id || isNaN(Number(id))) {
+      return res.status(400).json({ error: 'Некорректный id расписания' });
+    }
     const { name, is_active } = req.body;
     const schedule = await Schedule.findByPk(id);
     if (!schedule) return res.status(404).json({ error: 'Schedule not found' });

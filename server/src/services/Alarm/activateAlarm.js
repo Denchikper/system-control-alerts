@@ -3,8 +3,9 @@ const logger = require('../../utils/logger');
 const Channel = require('../../models/Channel');
 const deactivateAlarm = require('./deactivateAlarm');
 const Alarm = require('../../models/Alarm');
+const config = require('../../config');
 
-const DEVICE_ID = 'a41942b7-4f77-4b13-90d5-da88294125f1'; // конкретное устройство
+const DEVICE_ID = config.relayDeviceId; // целевое реле из конфига
 
 const activateAlarm = async (alarm, res) => {
   try {

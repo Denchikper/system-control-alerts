@@ -43,6 +43,12 @@ export default function EditScheduleMenu({
     };
 
     const handleSaveSchedule = async () => {
+      if (!schedulesActual.id) {
+        console.warn("Расписание не выбрано — сохранять нечего");
+        onClose();
+        return;
+      }
+
       const res = await schedulesUpdate(
         token,
         schedulesActual.id,
@@ -124,7 +130,7 @@ export default function EditScheduleMenu({
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
       />
 
-      <div className="relative z-10 w-[90vw] h-[80vh] bg-[#0D1117] rounded-2xl p-5 flex flex-col">
+      <div className="relative z-10 w-[90vw] h-[80vh] bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-5 flex flex-col shadow-2xl">
         
         {/* HEADER */}
         <div className="flex items-center gap-3 mb-4 justify-between">
@@ -134,8 +140,8 @@ export default function EditScheduleMenu({
             placeholder="Название расписания"
             className="
               flex-1
-              bg-[#161B22]
-              border border-gray-700
+              bg-[var(--surface-2)]
+              border border-[var(--border)]
               rounded-lg
               px-4 py-2
               text-lg font-medium
@@ -145,7 +151,7 @@ export default function EditScheduleMenu({
           />
           <button
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-gray-700"
+            className="p-2 rounded-lg hover:bg-[var(--surface-2)]"
           >
             <X />
           </button>

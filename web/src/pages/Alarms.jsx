@@ -103,9 +103,9 @@ export default function AlarmsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0B0E13] text-gray-100">
+      <div className="min-h-screen bg-[var(--bg)] text-[var(--text)]">
         <Navbar />
-        <div className="max-w-5xl mx-auto mt-8 px-6">
+        <div className="max-w-5xl mx-auto mt-8 px-4 sm:px-6">
           <p className="text-center py-8">Загрузка тревог...</p>
         </div>
       </div>
@@ -113,12 +113,12 @@ export default function AlarmsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0B0E13] text-gray-100">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)]">
       <Navbar />
 
-      <div className="max-w-5xl mx-auto mt-8 px-6 pb-10">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-semibold">Список тревог</h1>
+      <div className="max-w-5xl mx-auto mt-6 sm:mt-8 px-4 sm:px-6 pb-10">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+          <h1 className="text-xl sm:text-2xl font-semibold">Список тревог</h1>
           <div className="flex items-center gap-3">
             <button
               onClick={openCreate}
@@ -129,7 +129,7 @@ export default function AlarmsPage() {
             <button
               onClick={loadAlarms}
               title="Обновить"
-              className="px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg"
+              className="px-3 py-2 bg-[var(--surface-2)] hover:bg-[var(--surface-3)] rounded-lg"
             >
               Обновить
             </button>
@@ -140,7 +140,7 @@ export default function AlarmsPage() {
 
         <div className="space-y-4 animate-modalEnter">
           {alarms.length === 0 ? (
-            <p className="text-gray-400 text-center py-6">Нет доступных тревог</p>
+            <p className="text-[var(--text-muted)] text-center py-6">Нет доступных тревог</p>
           ) : (
             alarms.map((alarm) => (
               <AlarmItem

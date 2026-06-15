@@ -14,6 +14,10 @@ export async function activateSchedule(token, schedulesId, logout, navigate) {
   }, logout, navigate);
 }
 
+export async function deactivateSchedule(token, logout, navigate) {
+  return await fetchWithAuth(token, "/alerts/schedules/deactivate", { method: "PUT" }, logout, navigate);
+}
+
 export async function deleteSchedules(token, id, logout, navigate) {
   return await fetchWithAuth(token, `/alerts/schedules/${id}`, { method: "DELETE" }, logout, navigate);
 }

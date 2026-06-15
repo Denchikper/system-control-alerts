@@ -10,7 +10,7 @@ export default function StyledCheckbox({ label, checked, onChange }) {
     >
       <div
         className={`w-6 h-6 rounded-md border transition-all duration-200 flex items-center justify-center
-        ${checked ? "bg-blue-600 border-blue-500" : "bg-[#0E1117] border-gray-600 hover:border-gray-400"}`}
+        ${checked ? "bg-blue-600 border-blue-500" : "bg-[var(--bg)] border-[var(--border)] hover:border-[var(--border)]"}`}
       >
         {checked && (
           <svg
@@ -24,7 +24,7 @@ export default function StyledCheckbox({ label, checked, onChange }) {
           </svg>
         )}
       </div>
-      <span className="text-gray-300">{label}</span>
+      <span className="text-[var(--text-soft)]">{label}</span>
     </label>
   );
 }

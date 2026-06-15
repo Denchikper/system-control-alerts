@@ -17,12 +17,13 @@ class WebSocketServer {
     setupHeartbeat(this);
   }
 
-  // Отправка команды одному устройству
-  sendCommandToDevice(deviceId, command, channel) {
+  // Отправка команды одному устройству.
+  // extra — дополнительные поля payload (например, { duration }).
+  sendCommandToDevice(deviceId, command, channel, extra = {}) {
     const ws = this.devices.get(deviceId);
     if (!ws || ws.readyState !== WebSocket.OPEN) return false;
     try {
-      const payload = { command };
+      const payload = { command, ...extra };
       if (channel !== undefined) payload.channel = channel;
       ws.send(JSON.stringify(payload));
       return true;

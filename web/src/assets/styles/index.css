@@ -1,19 +1,68 @@
 @import "tailwindcss";
 
+/* ===== Цветовые токены темы ===== */
+:root,
+:root[data-theme="dark"] {
+  --bg: #0E1117;
+  --surface: #151A22;
+  --surface-2: #161B22;
+  --surface-3: #2b2f3a;
+  --input: #11141A;
+  --border: #374151;
+  --text: #f3f4f6;
+  --text-soft: #d1d5db;
+  --text-muted: #9ca3af;
+
+  --scrollbar-track: #151a22;
+  --scrollbar-thumb: #2b2f3a;
+  --scrollbar-thumb-hover: #3a3f4d;
+
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  --bg: #f1f3f6;
+  --surface: #ffffff;
+  --surface-2: #f3f5f8;
+  --surface-3: #e3e7ec;
+  --input: #ffffff;
+  --border: #d3d8e0;
+  --text: #111827;
+  --text-soft: #374151;
+  --text-muted: #6b7280;
+
+  --scrollbar-track: #e3e7ec;
+  --scrollbar-thumb: #c2c8d2;
+  --scrollbar-thumb-hover: #aab2bf;
+
+  color-scheme: light;
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
   width: 100%;
   height: 100%;
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
   user-select: none;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Кнопки со сплошным акцентным фоном всегда со светлым текстом (в обеих темах) */
+button.bg-blue-600, button.bg-blue-700,
+button.bg-green-600, button.bg-green-700,
+button.bg-red-600, button.bg-red-700,
+button.bg-yellow-600, button.bg-yellow-700 {
+  color: #fff;
 }
 
 img {
@@ -52,16 +101,16 @@ img {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #2b2f3a;
+  background-color: var(--scrollbar-thumb);
   border-radius: 4px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: #3a3f4d;
+  background-color: var(--scrollbar-thumb-hover);
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #151a22;
+  background: var(--scrollbar-track);
 }
 
 .custom-scrollbar-2::-webkit-scrollbar {
@@ -69,17 +118,17 @@ img {
 }
 
 .custom-scrollbar-2::-webkit-scrollbar-thumb {
-  background-color: #2b2f3a;
+  background-color: var(--scrollbar-thumb);
   border-radius: 4px;
 }
 
 .custom-scrollbar-2::-webkit-scrollbar-thumb:hover {
-  background-color: #3a3f4d;
+  background-color: var(--scrollbar-thumb-hover);
   
 }
 
 .custom-scrollbar-2::-webkit-scrollbar-track {
-  background: #0D1117;
+  background: var(--scrollbar-track);
 }
 
 .custom-scrollbar-3::-webkit-scrollbar {
@@ -87,15 +136,15 @@ img {
 }
 
 .custom-scrollbar-3::-webkit-scrollbar-thumb {
-  background-color: #2b2f3a;
+  background-color: var(--scrollbar-thumb);
   border-radius: 4px;
 }
 
 .custom-scrollbar-3::-webkit-scrollbar-thumb:hover {
-  background-color: #3a3f4d;
+  background-color: var(--scrollbar-thumb-hover);
   
 }
 
 .custom-scrollbar-3::-webkit-scrollbar-track {
-  background: #0D1117;
+  background: var(--scrollbar-track);
 }

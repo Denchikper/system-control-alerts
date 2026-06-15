@@ -5,8 +5,7 @@ const AlertPlanned = require('../../models/AlertPlanned');
 const ScheduleEvent = require('../../models/ScheduleEvent');
 const controlRing = require('./controlRing');
 const logger = require('../../utils/logger');
-
-const SINGLE_CHANNEL_ID = 6;
+const config = require('../../config');
 
 class AlertEngine {
   constructor() {
@@ -34,7 +33,7 @@ class AlertEngine {
 
     try {
       await this.checkSchedule(now);
-      // await this.checkPlannedAlerts(now);
+      await this.checkPlannedAlerts(now);
     } catch (err) {
       logger.alertengine_error(`AlertEngine error: ${err.stack || err}`);
     }
@@ -97,9 +96,9 @@ class AlertEngine {
     }
   }
 
-  async checkPlannedAlerts() {
-    const nowUtc = new Date();
-    const dayKey = nowUtc.toISOString().slice(0, 10);
+  // Сравнение ведётся по локальному серверному времени — консистентно с checkSchedule.
+  async checkPlannedAlerts(now = new Date()) {
+    const dayKey = now.toISOString().slice(0, 10);
     this.cleanupDailyState(dayKey);
 
     const activeAlerts = await AlertPlanned.findAll({ where: { is_active: true } });
@@ -111,47 +110,50 @@ class AlertEngine {
       switch (alert.recurrence) {
         case 'once':
           shouldTrigger =
-            alertTime.getUTCFullYear() === nowUtc.getUTCFullYear() &&
-            alertTime.getUTCMonth() === nowUtc.getUTCMonth() &&
-            alertTime.getUTCDate() === nowUtc.getUTCDate() &&
-            alertTime.getUTCHours() === nowUtc.getUTCHours() &&
-            alertTime.getUTCMinutes() === nowUtc.getUTCMinutes();
+            alertTime.getFullYear() === now.getFullYear() &&
+            alertTime.getMonth() === now.getMonth() &&
+            alertTime.getDate() === now.getDate() &&
+            alertTime.getHours() === now.getHours() &&
+            alertTime.getMinutes() === now.getMinutes();
           break;
 
         case 'daily':
           shouldTrigger =
-            alertTime.getUTCHours() === nowUtc.getUTCHours() &&
-            alertTime.getUTCMinutes() === nowUtc.getUTCMinutes();
+            alertTime.getHours() === now.getHours() &&
+            alertTime.getMinutes() === now.getMinutes();
           break;
 
         case 'weekly':
           shouldTrigger =
-            alertTime.getUTCDay() === nowUtc.getUTCDay() &&
-            alertTime.getUTCHours() === nowUtc.getUTCHours() &&
-            alertTime.getUTCMinutes() === nowUtc.getUTCMinutes();
+            alertTime.getDay() === now.getDay() &&
+            alertTime.getHours() === now.getHours() &&
+            alertTime.getMinutes() === now.getMinutes();
           break;
 
         case 'monthly':
           shouldTrigger =
-            alertTime.getUTCDate() === nowUtc.getUTCDate() &&
-            alertTime.getUTCHours() === nowUtc.getUTCHours() &&
-            alertTime.getUTCMinutes() === nowUtc.getUTCMinutes();
+            alertTime.getDate() === now.getDate() &&
+            alertTime.getHours() === now.getHours() &&
+            alertTime.getMinutes() === now.getMinutes();
           break;
       }
 
       const triggerKey = `${dayKey}:planned:${alert.id}`;
       if (shouldTrigger && !this.triggeredPlannedAlerts.has(triggerKey)) {
         this.triggeredPlannedAlerts.add(triggerKey);
-        this.triggerAlert(alert);
+        await this.triggerAlert(alert);
       }
     }
   }
 
   triggerAlert(alert) {
     logger.alertengine_success(
-      `[${new Date().toISOString()}] Planned Alert triggered: ${alert.name}, target_type: ${alert.target_type}, target_id: ${alert.target_id}`
+      `Сработало оповещение: "${alert.name}" (target_type: ${alert.target_type}, target_id: ${alert.target_id})`
     );
-    return controlRing(SINGLE_CHANNEL_ID, 'start', 'planned_alert');
+
+    // Для target_type === 'channel' звоним на указанный канал; иначе — на канал по умолчанию.
+    const channelId = alert.target_type === 'channel' ? alert.target_id : config.ringChannelId;
+    return controlRing(channelId);
   }
 }
 
